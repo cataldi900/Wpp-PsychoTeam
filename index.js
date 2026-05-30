@@ -1,15 +1,12 @@
 // ============================================================================
-//  Wpp-PsychoTeam  —  Robô de atendimento automático do WhatsApp
+//  Wpp-PsychoTeam — Assistente de WhatsApp
 //
-//  O que ele faz:
-//   1. Conecta ao seu WhatsApp via QR Code (uma vez só).
-//   2. Fica "ouvindo" as mensagens que chegam.
-//   3. Quando alguém manda uma mensagem perguntando sobre a consultoria
-//      (detectado pelas palavras-chave do config.js), ele responde com uma
-//      saudação educada de acordo com o horário ("oi, bom dia, tudo bem?")
-//      e envia os 2 PDFs da pasta /pdfs.
+//  Recurso A (LIGADO):  Relatório diário priorizado do que responder.
+//  Recurso B (DESLIGADO): Auto-resposta da consultoria com 2 PDFs.
+//  Ligue/desligue cada um no arquivo config.js.
 //
-//  Para iniciar:  npm start
+//  Iniciar normal:        npm start
+//  Gerar relatório agora:  npm run relatorio   (útil para testar)
 // ============================================================================
 
 const fs = require("fs");
@@ -18,79 +15,16 @@ const qrcode = require("qrcode-terminal");
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
 
 const config = require("./config");
+const { normalizar, saudacaoDoHorario } = require("./lib/util");
+const { coletarConversas, montarRelatorio } = require("./lib/relatorio");
 
-// --- Memória de quem já foi respondido (para o anti-spam) -------------------
-const ARQUIVO_MEMORIA = path.join(__dirname, "respondidos.json");
+const GERAR_AGORA = process.argv.includes("--agora");
 
-function carregarMemoria() {
-  try {
-    return JSON.parse(fs.readFileSync(ARQUIVO_MEMORIA, "utf8"));
-  } catch {
-    return {};
-  }
-}
-
-function salvarMemoria(memoria) {
-  try {
-    fs.writeFileSync(ARQUIVO_MEMORIA, JSON.stringify(memoria, null, 2));
-  } catch (e) {
-    console.error("⚠️  Não consegui salvar a memória anti-spam:", e.message);
-  }
-}
-
-let respondidos = carregarMemoria();
-
-// --- Funções auxiliares -----------------------------------------------------
-
-// Remove acentos e deixa minúsculo, para comparar palavras-chave sem erro.
-function normalizar(texto) {
-  return (texto || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "");
-}
-
-// Decide "bom dia" / "boa tarde" / "boa noite" pelo horário atual.
-function saudacaoDoHorario() {
-  const hora = new Date().getHours();
-  const { bomDia, boaTarde } = config.faixasHorario;
-  if (hora >= bomDia.inicio && hora <= bomDia.fim) return "bom dia";
-  if (hora >= boaTarde.inicio && hora <= boaTarde.fim) return "boa tarde";
-  return "boa noite";
-}
-
-// Verifica se a mensagem contém alguma das palavras-chave.
-function mensagemPedeInfo(texto) {
-  const t = normalizar(texto);
-  return config.palavrasChave.some((p) => t.includes(normalizar(p)));
-}
-
-// Verifica se já respondemos essa pessoa dentro do período anti-spam.
-function jaRespondidoRecentemente(idContato) {
-  if (config.horasEntreRespostas <= 0) return false;
-  const ultima = respondidos[idContato];
-  if (!ultima) return false;
-  const horasPassadas = (Date.now() - ultima) / (1000 * 60 * 60);
-  return horasPassadas < config.horasEntreRespostas;
-}
-
-// Carrega os PDFs da pasta configurada.
-function carregarPdfs() {
-  const pasta = path.resolve(__dirname, config.pastaPdfs);
-  if (!fs.existsSync(pasta)) {
-    console.error(`⚠️  A pasta de PDFs não existe: ${pasta}`);
-    return [];
-  }
-  return fs
-    .readdirSync(pasta)
-    .filter((nome) => nome.toLowerCase().endsWith(".pdf"))
-    .sort()
-    .map((nome) => path.join(pasta, nome));
-}
-
-// --- Cliente do WhatsApp ----------------------------------------------------
+// ============================================================================
+//  Cliente do WhatsApp
+// ============================================================================
 const client = new Client({
-  authStrategy: new LocalAuth(), // salva a sessão para não pedir QR toda hora
+  authStrategy: new LocalAuth(),
   puppeteer: {
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -103,76 +37,148 @@ client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
 });
 
-client.on("authenticated", () => {
-  console.log("✅ Autenticado com sucesso!");
-});
+client.on("authenticated", () => console.log("✅ Autenticado com sucesso!"));
 
-client.on("ready", () => {
-  const pdfs = carregarPdfs();
-  console.log("\n🤖 Robô conectado e funcionando!");
-  console.log(`📄 PDFs encontrados na pasta: ${pdfs.length}`);
-  pdfs.forEach((p) => console.log(`   - ${path.basename(p)}`));
-  if (pdfs.length === 0) {
+client.on("ready", async () => {
+  console.log("\n🤖 Assistente conectado!");
+
+  if (config.relatorio.ativo) {
     console.log(
-      "⚠️  ATENÇÃO: nenhum PDF na pasta /pdfs. Coloque seus arquivos lá!"
+      `📋 Relatório diário LIGADO — horários: ${config.relatorio.horarios.join(", ")}`
     );
+    iniciarAgendador();
   }
-  console.log("\n⏳ Aguardando mensagens...\n");
+  if (config.autoResposta.ativo) {
+    console.log("🤝 Auto-resposta da consultoria LIGADA.");
+  }
+
+  if (GERAR_AGORA) {
+    console.log("\n⚡ Gerando um relatório agora (modo teste)...\n");
+    await gerarRelatorio();
+    console.log("\nPronto. Encerrando.");
+    process.exit(0);
+  }
+
+  console.log("\n⏳ Rodando. Deixe esta janela aberta.\n");
 });
 
-client.on("message", async (mensagem) => {
+client.on("disconnected", (motivo) =>
+  console.log("🔌 Desconectado do WhatsApp:", motivo)
+);
+
+// ============================================================================
+//  RECURSO A — Relatório diário
+// ============================================================================
+
+async function gerarRelatorio() {
   try {
-    // Ignora mensagens de status/transmissão
-    if (mensagem.from === "status@broadcast") return;
+    const conversas = await coletarConversas(client, config.relatorio);
+    const texto = montarRelatorio(conversas);
 
-    // Ignora grupos, se configurado
-    const ehGrupo = mensagem.from.endsWith("@g.us");
-    if (ehGrupo && !config.responderEmGrupos) return;
+    // Mostra no terminal
+    console.log("\n----------------------------------------");
+    console.log(texto);
+    console.log("----------------------------------------\n");
 
-    // A mensagem pede informações sobre a consultoria?
-    if (!mensagemPedeInfo(mensagem.body)) return;
-
-    // Anti-spam: já respondemos essa pessoa há pouco tempo?
-    if (jaRespondidoRecentemente(mensagem.from)) {
-      console.log(`⏭️  Ignorado (anti-spam): ${mensagem.from}`);
-      return;
+    // Envia para você mesmo no WhatsApp
+    if (config.relatorio.enviarParaMim && client.info && client.info.wid) {
+      await client.sendMessage(client.info.wid._serialized, texto);
+      console.log("📤 Relatório enviado para a sua conversa 'Você'.");
     }
 
-    console.log(`💬 Pedido de info recebido de: ${mensagem.from}`);
+    // Salva em arquivo
+    if (config.relatorio.salvarArquivo) {
+      const pasta = path.join(__dirname, "relatorios");
+      fs.mkdirSync(pasta, { recursive: true });
+      const nome = `relatorio-${new Date()
+        .toISOString()
+        .slice(0, 16)
+        .replace(/[:T]/g, "-")}.txt`;
+      fs.writeFileSync(path.join(pasta, nome), texto);
+      console.log(`💾 Salvo em relatorios/${nome}`);
+    }
+  } catch (e) {
+    console.error("❌ Erro ao gerar relatório:", e.message);
+  }
+}
 
-    // 1) Saudação educada conforme o horário
-    const saudacao = config.mensagemSaudacao.replace(
+// Agendador simples: a cada minuto, vê se a hora atual bate com algum horário.
+function iniciarAgendador() {
+  let ultimoDisparo = "";
+  setInterval(() => {
+    const agora = new Date();
+    const hhmm = `${String(agora.getHours()).padStart(2, "0")}:${String(
+      agora.getMinutes()
+    ).padStart(2, "0")}`;
+    if (config.relatorio.horarios.includes(hhmm) && ultimoDisparo !== hhmm) {
+      ultimoDisparo = hhmm;
+      console.log(`\n⏰ ${hhmm} — gerando relatório agendado...`);
+      gerarRelatorio();
+    }
+  }, 60 * 1000);
+}
+
+// ============================================================================
+//  RECURSO B — Auto-resposta da consultoria (opcional)
+// ============================================================================
+
+function carregarPdfs() {
+  const pasta = path.resolve(__dirname, config.autoResposta.pastaPdfs);
+  if (!fs.existsSync(pasta)) return [];
+  return fs
+    .readdirSync(pasta)
+    .filter((n) => n.toLowerCase().endsWith(".pdf"))
+    .sort()
+    .map((n) => path.join(pasta, n));
+}
+
+const respondidosPath = path.join(__dirname, "respondidos.json");
+let respondidos = {};
+try {
+  respondidos = JSON.parse(fs.readFileSync(respondidosPath, "utf8"));
+} catch {
+  respondidos = {};
+}
+
+function pedeInfo(texto) {
+  const t = normalizar(texto);
+  return config.autoResposta.palavrasChave.some((p) => t.includes(normalizar(p)));
+}
+
+function respondidoRecentemente(id) {
+  const h = config.autoResposta.horasEntreRespostas;
+  if (h <= 0) return false;
+  const ultima = respondidos[id];
+  return ultima && (Date.now() - ultima) / 3600000 < h;
+}
+
+client.on("message", async (msg) => {
+  if (!config.autoResposta.ativo) return;
+  try {
+    if (msg.from === "status@broadcast") return;
+    if (msg.from.endsWith("@g.us") && !config.geral.responderEmGrupos) return;
+    if (!pedeInfo(msg.body)) return;
+    if (respondidoRecentemente(msg.from)) return;
+
+    const saudacao = config.autoResposta.mensagemSaudacao.replace(
       "{saudacao}",
-      saudacaoDoHorario()
+      saudacaoDoHorario(config.geral.faixasHorario)
     );
-    await client.sendMessage(mensagem.from, saudacao);
-
-    // 2) Mensagem de apresentação
-    if (config.mensagemApresentacao) {
-      await client.sendMessage(mensagem.from, config.mensagemApresentacao);
+    await client.sendMessage(msg.from, saudacao);
+    if (config.autoResposta.mensagemApresentacao) {
+      await client.sendMessage(msg.from, config.autoResposta.mensagemApresentacao);
     }
-
-    // 3) Envia os PDFs
-    const pdfs = carregarPdfs();
-    for (const caminhoPdf of pdfs) {
-      const media = MessageMedia.fromFilePath(caminhoPdf);
-      await client.sendMessage(mensagem.from, media);
-      console.log(`   📎 Enviado: ${path.basename(caminhoPdf)}`);
+    for (const pdf of carregarPdfs()) {
+      await client.sendMessage(msg.from, MessageMedia.fromFilePath(pdf));
     }
-
-    // Marca como respondido (anti-spam)
-    respondidos[mensagem.from] = Date.now();
-    salvarMemoria(respondidos);
-
-    console.log(`✅ Resposta completa enviada para: ${mensagem.from}\n`);
-  } catch (erro) {
-    console.error("❌ Erro ao processar mensagem:", erro.message);
+    respondidos[msg.from] = Date.now();
+    fs.writeFileSync(respondidosPath, JSON.stringify(respondidos, null, 2));
+    console.log(`✅ Auto-resposta enviada para: ${msg.from}`);
+  } catch (e) {
+    console.error("❌ Erro na auto-resposta:", e.message);
   }
 });
 
-client.on("disconnected", (motivo) => {
-  console.log("🔌 Desconectado do WhatsApp:", motivo);
-});
-
-console.log("🚀 Iniciando o robô... (pode demorar alguns segundos)");
+// ============================================================================
+console.log("🚀 Iniciando o assistente... (pode demorar alguns segundos)");
 client.initialize();

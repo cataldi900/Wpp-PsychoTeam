@@ -1,11 +1,12 @@
 {
   "name": "wpp-psychoteam",
   "version": "1.0.0",
-  "description": "Robô de atendimento automático do WhatsApp: responde novos clientes que perguntam sobre a consultoria com uma saudação educada e envia 2 PDFs.",
+  "description": "Assistente de WhatsApp: relatório diário priorizado do que responder, com auto-resposta opcional da consultoria.",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "relatorio": "node index.js --agora"
   },
   "license": "MIT",
   "dependencies": {

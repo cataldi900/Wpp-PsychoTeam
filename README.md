@@ -1,89 +1,99 @@
 # Wpp-PsychoTeam 🤖💜
 
-Robô que **responde automaticamente** no seu WhatsApp quem entra em contato
-perguntando sobre a **consultoria**. Ele manda uma saudação educada conforme o
-horário (_"Oi, bom dia! Tudo bem?"_) e envia **2 PDFs** com as informações.
+Assistente que conecta no seu WhatsApp (igual ao WhatsApp Web, via QR Code) e
+te ajuda a **organizar a demanda diária**. Tem dois recursos, que você liga ou
+desliga no arquivo `config.js`:
 
-Funciona com o seu número normal do WhatsApp (igual ao WhatsApp Web) — **não
-precisa de API paga**. Você conecta uma vez escaneando um QR Code e ele cuida
-do resto sozinho.
+| Recurso | O que faz | Padrão |
+|---|---|---|
+| 📋 **Relatório diário** | De manhã e à noite, te manda um **resumo priorizado** de quem está esperando resposta (🔴 urgente / 🟡 importante / 🟢 pode esperar). | **LIGADO** |
+| 🤝 **Auto-resposta** | Responde sozinho quem pergunta da consultoria, com saudação + 2 PDFs. | Desligado |
 
----
-
-## ⚙️ Como funciona
-
-1. Alguém te manda uma mensagem como _"oi, gostaria de mais informações sobre a consultoria"_.
-2. O robô detecta palavras-chave (consultoria, plano, valores, preço...).
-3. Ele responde: **"Oi, bom dia! Tudo bem? 😊"** (a saudação muda com o horário).
-4. Manda uma mensagem de apresentação + os **2 PDFs** da pasta `pdfs/`.
-5. Anti-spam: não responde a mesma pessoa de novo nas próximas 12h (ajustável).
+> ⚠️ **Importante sobre acesso:** ninguém "de fora" (nem eu, uma IA) consegue
+> ver as notificações do seu celular ou entrar na sua conta. Quem se conecta é
+> **você**, escaneando o QR Code uma vez. O programa roda **no seu computador**.
 
 ---
 
-## 🚀 Passo a passo para usar
+## 📋 Como é o relatório
 
-### 1. Instale o Node.js (só na primeira vez)
-Baixe e instale em: https://nodejs.org (versão LTS).
+Nos horários que você definir (padrão **07:30** e **20:00**), o assistente varre
+suas conversas e te manda — **no seu próprio WhatsApp** (conversa "Você") — algo
+assim:
 
-### 2. Coloque seus 2 PDFs
-Arraste seus arquivos para dentro da pasta **`pdfs/`**. Nomeie assim para
-garantir a ordem de envio:
 ```
-pdfs/1-apresentacao.pdf
-pdfs/2-planos-e-valores.pdf
+📋 Resumo do WhatsApp — sábado, 30/05, 07:30
+
+Você tem 3 conversa(s) aguardando resposta:
+🔴 1 urgente  •  🟡 1 importante  •  🟢 1 pode esperar
+
+🔴 URGENTE — responder primeiro
+• Maria S. (há 2h)
+   "preciso muito falar, estou em crise..."
+   ↳ ⚠️ palavras de urgência/crise, 4 mensagens não lidas
+
+🟡 IMPORTANTE
+• João P. (há 8h)
+   "gostaria de remarcar minha sessão..."
+   ↳ agenda/pagamento/dúvida, fez uma pergunta
+
+🟢 Pode esperar
+• Ana (há poucos minutos)
+   "obrigada!!"
 ```
 
-### 3. Instale o robô (só na primeira vez)
+**Como ele decide a prioridade (modo local, 100% no seu PC):** palavras de
+urgência/crise, temas de agenda/pagamento/dúvida, há quanto tempo a pessoa
+espera, contatos novos (possível cliente) e quantidade de mensagens não lidas.
+Nenhum conteúdo de paciente sai do seu computador.
+
+---
+
+## 🚀 Como usar
+
+### 1. Instale o Node.js (uma vez)
+Baixe a versão LTS em https://nodejs.org
+
+### 2. Instale o assistente (uma vez)
 Abra o terminal **nesta pasta** e rode:
 ```bash
 npm install
 ```
 
-### 4. Ligue o robô
+### 3. Ligue
 ```bash
 npm start
 ```
-Vai aparecer um **QR Code** no terminal. No celular:
-**WhatsApp → Aparelhos conectados → Conectar um aparelho** → aponte para o QR.
+Aparece um **QR Code**. No celular: **WhatsApp → Aparelhos conectados →
+Conectar um aparelho** → aponte para o QR. Quando aparecer
+**"🤖 Assistente conectado!"**, está funcionando. Deixe a janela aberta.
 
-Pronto! Quando aparecer **"🤖 Robô conectado e funcionando!"**, ele já está
-respondendo sozinho. Deixe o terminal aberto / o computador ligado para ele
-continuar funcionando.
-
----
-
-## ✏️ Como personalizar
-
-Abra o arquivo **`config.js`** — está tudo comentado e fácil de editar:
-
-| O que mudar | Onde |
-|---|---|
-| Palavras que ativam a resposta | `palavrasChave` |
-| Texto da saudação | `mensagemSaudacao` |
-| Texto que acompanha os PDFs | `mensagemApresentacao` |
-| Tempo do anti-spam (em horas) | `horasEntreRespostas` (use `0` para responder sempre) |
-| Responder em grupos ou não | `responderEmGrupos` |
-| Faixas de horário do "bom dia/tarde/noite" | `faixasHorario` |
-
-Para trocar os PDFs, é só substituir os arquivos na pasta `pdfs/`. Não precisa
-reiniciar.
+### Testar o relatório na hora (sem esperar o horário)
+```bash
+npm run relatorio
+```
+Gera um relatório imediatamente e te envia, para você ver como fica.
 
 ---
 
-## ❓ Dúvidas comuns
+## ✏️ Personalizar (`config.js`)
 
-- **Preciso deixar o computador ligado?** Sim. Enquanto o robô estiver rodando
-  ele responde. Se fechar o terminal, ele para (é só rodar `npm start` de novo).
-- **Vou ter que escanear o QR toda vez?** Não. A sessão fica salva; só pede o QR
-  de novo se você desconectar o aparelho pelo celular.
-- **Ele responde minhas conversas antigas?** Não. Só reage a mensagens **novas**
-  que chegarem depois que ele estiver ligado e que contenham as palavras-chave.
+**Relatório (`relatorio`):**
+- `horarios` — quando receber, ex.: `["07:30", "20:00"]`
+- `janelaHoras` — olhar mensagens de quantas horas pra trás
+- `horasParaSubirPrioridade` — a partir de quanto tempo sem resposta "sobe" a prioridade
+- `palavrasUrgencia` / `palavrasImportantes` — as palavras que classificam
+- `enviarParaMim` / `salvarArquivo` — onde entregar o relatório
+
+**Auto-resposta (`autoResposta`):** mude `ativo: true` para ligar. Configure
+`palavrasChave`, mensagens e a pasta dos PDFs (`pdfs/`).
 
 ---
 
-## ⚠️ Importante / segurança
+## ⚠️ Privacidade e segurança
 
-- A pasta `.wwebjs_auth/` guarda o acesso à sua conta — **nunca** compartilhe
-  nem suba para o GitHub (já está no `.gitignore`).
-- Use com bom senso e respeitando as regras do WhatsApp (não use para envio em
-  massa / spam). Aqui ele só **responde** quem **te procurou primeiro**.
+- A pasta `.wwebjs_auth/` dá acesso à sua conta — **nunca** compartilhe.
+- A pasta `relatorios/` contém dados de pacientes — já está protegida no
+  `.gitignore` para **não** ir pro GitHub.
+- Tudo roda localmente no modo padrão. Nada é enviado para a internet.
+- Precisa do computador ligado e da janela aberta para funcionar.

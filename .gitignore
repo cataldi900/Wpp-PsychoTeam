@@ -8,6 +8,9 @@ node_modules/
 # Memória anti-spam (gerada automaticamente)
 respondidos.json
 
+# Relatórios gerados (contêm dados de pacientes — NUNCA subir!)
+relatorios/
+
 # Seus PDFs (são seus arquivos, não vão pro GitHub)
 pdfs/*.pdf
 
