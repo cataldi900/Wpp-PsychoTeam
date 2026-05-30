@@ -1,0 +1,16 @@
+# Dependências
+node_modules/
+
+# Sessão do WhatsApp (NÃO compartilhe! dá acesso à sua conta)
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Memória anti-spam (gerada automaticamente)
+respondidos.json
+
+# Seus PDFs (são seus arquivos, não vão pro GitHub)
+pdfs/*.pdf
+
+# Sistema
+.DS_Store
+*.log

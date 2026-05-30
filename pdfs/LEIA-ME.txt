@@ -1,0 +1,11 @@
+Coloque aqui dentro desta pasta os 2 PDFs que o robô deve enviar.
+
+Dicas:
+- O robô envia TODOS os arquivos .pdf desta pasta, em ordem alfabética.
+- Para garantir a ordem certa, nomeie assim:
+      1-apresentacao.pdf
+      2-planos-e-valores.pdf
+- Você pode trocar os PDFs a qualquer momento, é só substituir os arquivos aqui.
+- Não precisa reiniciar o robô para trocar os PDFs.
+
+Pode apagar este arquivo LEIA-ME.txt depois que colocar seus PDFs.
