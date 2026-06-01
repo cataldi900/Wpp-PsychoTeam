@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback de Técnica — PsychoTeam</title>
+<style>
+  :root{
+    --bg:#0f1115; --card:#171a21; --card2:#1e222b; --line:#2a2f3a;
+    --txt:#e8eaed; --muted:#9aa3b2; --accent:#5b8cff; --accent2:#7c5bff;
+    --good:#34d399; --bad:#f87171; --warn:#fbbf24; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,#0d0f14,#12141b 60%,#0d0f14);color:var(--txt);min-height:100vh}
+  header{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;
+    background:rgba(20,22,30,.7);backdrop-filter:blur(8px);position:sticky;top:0;z-index:20}
+  .logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:grid;place-items:center;font-size:22px}
+  header h1{font-size:18px;margin:0;font-weight:650}
+  header p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 20px}
+  .card h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:650}
+  .step{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;background:var(--accent);
+    color:#fff;font-size:11px;font-weight:700;margin-right:8px;vertical-align:1px}
+  label.fld{display:block;font-size:12.5px;color:var(--muted);margin:12px 0 5px}
+  input[type=text],select{width:100%;padding:11px 12px;background:var(--card2);border:1px solid var(--line);
+    border-radius:10px;color:var(--txt);font-size:14px;outline:none}
+  input[type=text]:focus,select:focus{border-color:var(--accent)}
+  .row{display:flex;gap:12px}.row>*{flex:1}
+  .filebtn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border:1.5px dashed var(--line);
+    border-radius:12px;background:var(--card2);cursor:pointer;font-size:13.5px;color:var(--muted);transition:.15s}
+  .filebtn:hover{border-color:var(--accent);color:var(--txt)}
+  video{width:100%;border-radius:12px;margin-top:12px;background:#000;max-height:340px}
+  .vctrl{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  button.btn{padding:9px 13px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--txt);
+    font-size:13px;cursor:pointer;transition:.15s;font-weight:550}
+  button.btn:hover{border-color:var(--accent);background:#222838}
+  button.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff}
+  button.btn.primary:hover{filter:brightness(1.08)}
+  .small{font-size:12px;color:var(--muted)}
+  .speed{display:flex;gap:4px;align-items:center}
+  .speed b{font-size:12px;color:var(--muted)}
+  .checks{display:flex;flex-direction:column;gap:9px;max-height:none}
+  .chk{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:var(--card2);cursor:pointer;transition:.15s}
+  .chk:hover{border-color:#3a4252}
+  .chk.on{border-color:var(--accent);background:#1a2336}
+  .chk .top{display:flex;align-items:center;gap:10px}
+  .chk .box{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;font-size:12px}
+  .chk.on .box{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chk .name{font-size:14px;font-weight:600}
+  .chk .det{font-size:12.5px;color:var(--muted);margin:8px 0 0 28px;display:none;line-height:1.5}
+  .chk.on .det{display:block}
+  .chk .det b{color:var(--txt);font-weight:600}
+  .frames{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .frame{position:relative;width:148px}
+  .frame canvas{width:148px;border-radius:9px;border:1px solid var(--line);cursor:crosshair;display:block;background:#000}
+  .frame .fbar{display:flex;gap:5px;margin-top:5px}
+  .frame .fbar button{flex:1;font-size:11px;padding:5px;border-radius:7px;border:1px solid var(--line);
+    background:var(--card2);color:var(--muted);cursor:pointer}
+  .frame .fbar button:hover{color:var(--txt);border-color:var(--accent)}
+  .anno-tools{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  .swatch{width:22px;height:22px;border-radius:6px;cursor:pointer;border:2px solid transparent}
+  .swatch.sel{border-color:#fff}
+  .out{background:#0c0e13;border:1px solid var(--line);border-radius:12px;padding:14px;font-size:13.5px;
+    line-height:1.65;white-space:pre-wrap;min-height:120px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .full{grid-column:1/-1}
+  .pill{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;background:#1a2336;color:var(--accent);margin-left:8px}
+  .hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--good);
+    color:#06281d;padding:11px 20px;border-radius:30px;font-weight:600;font-size:13.5px;transition:.3s;z-index:50;opacity:0}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  textarea{width:100%;min-height:64px;padding:11px 12px;background:var(--card2);border:1px solid var(--line);
+    border-radius:10px;color:var(--txt);font-size:13.5px;outline:none;resize:vertical;font-family:inherit}
+  textarea:focus{border-color:var(--accent)}
+  .empty{color:var(--muted);font-size:13px;text-align:center;padding:18px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🎯</div>
+  <div>
+    <h1>Feedback de Técnica <span class="pill">PsychoTeam</span></h1>
+    <p>Marque os erros, anote os frames e grave seu Loom em ~3 min — sem perder o vídeo que seus alunos amam.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- COLUNA ESQUERDA -->
+  <div style="display:flex;flex-direction:column;gap:20px">
+
+    <div class="card">
+      <h2><span class="step">1</span>Aluno & exercício</h2>
+      <div class="row">
+        <div>
+          <label class="fld">Nome do aluno</label>
+          <input type="text" id="aluno" placeholder="Ex: João">
+        </div>
+        <div>
+          <label class="fld">Exercício</label>
+          <select id="exercicio">
+            <option value="agachamento">Agachamento</option>
+            <option value="supino">Supino</option>
+            <option value="terra">Levantamento Terra</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="step">2</span>Vídeo do aluno</h2>
+      <label class="filebtn" id="filebtn">
+        📹 Clique para carregar o vídeo (fica só no seu navegador)
+        <input type="file" id="videoFile" accept="video/*" hidden>
+      </label>
+      <video id="player" controls hidden></video>
+      <div class="vctrl" id="vctrl" hidden>
+        <button class="btn" id="back">⏪ -0,1s</button>
+        <button class="btn" id="fwd">+0,1s ⏩</button>
+        <div class="speed">
+          <b>Velocidade</b>
+          <select id="speed" style="width:auto;padding:7px 8px">
+            <option value="0.25">0,25x</option>
+            <option value="0.5" selected>0,5x</option>
+            <option value="1">1x</option>
+          </select>
+        </div>
+        <button class="btn primary" id="capture">📸 Capturar este frame</button>
+      </div>
+      <div class="hint" id="vhint" hidden>Pause no ponto crítico do movimento (ex: fundo do agachamento) e capture. Os frames vão pra direita pra você anotar.</div>
+    </div>
+
+    <div class="card">
+      <h2><span class="step">3</span>Erros observados</h2>
+      <div class="checks" id="checks"></div>
+      <label class="fld" style="margin-top:14px">✅ Pontos positivos (o que já está bom)</label>
+      <textarea id="positivos" placeholder="Ex: boa profundidade, pegada firme, ritmo controlado..."></textarea>
+    </div>
+
+  </div>
+
+  <!-- COLUNA DIREITA -->
+  <div style="display:flex;flex-direction:column;gap:20px">
+
+    <div class="card">
+      <h2>🖍️ Frames anotados <span class="small" style="text-transform:none;letter-spacing:0">(mostre na tela durante o Loom)</span></h2>
+      <div class="anno-tools" id="annoTools" hidden>
+        <span class="small">Cor:</span>
+        <span class="swatch sel" style="background:#f87171" data-c="#f87171"></span>
+        <span class="swatch" style="background:#fbbf24" data-c="#fbbf24"></span>
+        <span class="swatch" style="background:#34d399" data-c="#34d399"></span>
+        <span class="swatch" style="background:#5b8cff" data-c="#5b8cff"></span>
+        <span class="small" style="margin-left:8px">Arraste no frame para desenhar uma seta.</span>
+      </div>
+      <div class="frames" id="frames"><div class="empty">Nenhum frame capturado ainda.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>📝 Roteiro do Loom <span class="small" style="text-transform:none;letter-spacing:0">(leia enquanto grava)</span></h2>
+      <div class="out" id="roteiro">Preencha o aluno, marque os erros e o roteiro aparece aqui automaticamente.</div>
+      <div class="vctrl" style="margin-top:12px">
+        <button class="btn primary" id="copyRot">📋 Copiar roteiro</button>
+        <button class="btn" id="copyMsg">💬 Copiar resumo pro aluno</button>
+      </div>
+      <div class="hint">Dica: abra o Loom, compartilhe a aba com os frames anotados, e leia o roteiro. Em vez de pensar no que falar, você só narra o que já está pronto.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- Base de erros comuns por exercício ---------- */
+const DB = {
+  agachamento:[
+    {n:"Joelho valgo (cai pra dentro)", d:"Os joelhos colapsam pra dentro na subida, tirando força e estressando a articulação.", cue:"Empurre os joelhos pra fora, na linha dos pés, durante toda a descida e subida.", drill:"Agachamento com mini band acima dos joelhos."},
+    {n:"Profundidade insuficiente", d:"Para antes da paralela, reduzindo o estímulo de glúteo e quadríceps.", cue:"Desça até a dobra do quadril passar a linha do joelho.", drill:"Box squat num caixote na altura-alvo."},
+    {n:"Lombar arredondando (butt wink)", d:"A pelve roda e a lombar arredonda no fundo, ponto de maior risco.", cue:"Peito alto e core firme; pare onde a coluna ainda fica neutra.", drill:"Goblet squat com pausa no fundo + mobilidade de quadril."},
+    {n:"Tronco inclina demais à frente", d:"O peito cai pra frente e vira quase um 'bom dia', sobrecarregando a lombar.", cue:"Peito pra cima, peso no meio do pé, joelho viaja à frente.", drill:"Front squat ou goblet leve pra forçar tronco ereto."},
+    {n:"Calcanhar sai do chão", d:"Perde base e empurra o peso pra ponta do pé.", cue:"Empurre o chão com o pé inteiro, distribua até o calcanhar.", drill:"Mobilidade de tornozelo + calço leve no calcanhar."},
+    {n:"Quadril sobe primeiro", d:"O quadril dispara na subida e o peito fica pra trás.", cue:"Suba peito e quadril juntos, como um bloco só.", drill:"Tempo squat (3s) focando subir o peito."}
+  ],
+  supino:[
+    {n:"Cotovelos muito abertos (90°)", d:"Cotovelos a 90° do tronco estressam o ombro e tiram força.", cue:"Mantenha os cotovelos a ~45–75° do corpo.", drill:"Supino com tempo, pensando em 'puxar' a barra pra baixo."},
+    {n:"Sem retração escapular", d:"Ombros soltos no banco = base instável e menos força.", cue:"Junte as escápulas e fixe-as no banco antes de descer.", drill:"Setup de retração + leg drive antes de cada série."},
+    {n:"Glúteo sai do banco", d:"Tira o glúteo do banco pra 'roubar' carga, descaracteriza o movimento.", cue:"Mantenha o glúteo no banco; use leg drive sem levantar o quadril.", drill:"Reduzir carga e firmar os pés no chão."},
+    {n:"Barra quica no peito", d:"Usa o repique do peito em vez da força muscular.", cue:"Controle a descida e toque o peito de leve.", drill:"Supino com pausa de 1s no peito."},
+    {n:"Trajetória inconsistente", d:"A barra desce/sobe em linhas diferentes a cada rep.", cue:"Desça na linha do mamilo e suba levemente em direção aos ombros.", drill:"Reps lentas focando o mesmo caminho."},
+    {n:"ADM incompleta", d:"Não toca o peito, encurtando a amplitude.", cue:"Toque o peito de leve a cada repetição.", drill:"Reduzir carga até completar a amplitude."}
+  ],
+  terra:[
+    {n:"Lombar arredondando", d:"Costas arredondam na puxada — maior fator de risco no terra.", cue:"Peito alto, costas neutras e core firme ANTES de tirar a barra do chão.", drill:"Terra com pausa no setup + cat-camel de aquecimento."},
+    {n:"Barra longe do corpo", d:"A barra afasta da canela, criando alavanca na lombar.", cue:"Barra raspando a canela; puxe-a contra o corpo o tempo todo.", drill:"Terra descalço/meião sentindo a barra raspar."},
+    {n:"Quadril sobe antes da barra", d:"O quadril dispara e vira quase um stiff ('stripper deadlift').", cue:"Empurre o chão; peito e barra sobem juntos.", drill:"Tempo deadlift focando peito e quadril no mesmo ritmo."},
+    {n:"Hiperextensão no topo", d:"Joga o tronco pra trás no final, estressando a lombar.", cue:"Trave quadril e glúteo no topo, sem inclinar pra trás.", drill:"Pausa de 1s no topo em postura neutra."},
+    {n:"Arranca sem tirar a folga", d:"Puxa a barra com tranco, sem tensionar antes.", cue:"Tire a folga da barra (pull the slack) e só então puxe.", drill:"Setup lento: tensione, respire, puxe."},
+    {n:"Ombros atrás da barra no setup", d:"Posição inicial ruim reduz eficiência da puxada.", cue:"Ombros levemente à frente da barra, escápula sobre ela.", drill:"Filmar o setup de lado e ajustar a posição."}
+  ]
+};
+const EX_NOME={agachamento:"agachamento",supino:"supino",terra:"levantamento terra"};
+
+/* ---------- Estado ---------- */
+let selected=new Set();
+let frameId=0;
+let annoColor="#f87171";
+
+/* ---------- Util ---------- */
+const $=id=>document.getElementById(id);
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1700);}
+
+/* ---------- Checklist ---------- */
+function renderChecks(){
+  const ex=$("exercicio").value;
+  const c=$("checks");c.innerHTML="";
+  selected=new Set();
+  DB[ex].forEach((err,i)=>{
+    const div=document.createElement("div");
+    div.className="chk";div.dataset.i=i;
+    div.innerHTML=`<div class="top"><div class="box">✓</div><div class="name">${err.n}</div></div>
+      <div class="det"><b>O que acontece:</b> ${err.d}<br><b>Cue:</b> ${err.cue}<br><b>Drill:</b> ${err.drill}</div>`;
+    div.onclick=()=>{div.classList.toggle("on");
+      if(div.classList.contains("on"))selected.add(i);else selected.delete(i);
+      buildRoteiro();};
+    c.appendChild(div);
+  });
+  buildRoteiro();
+}
+
+/* ---------- Roteiro ---------- */
+function buildRoteiro(){
+  const aluno=$("aluno").value.trim()||"aluno(a)";
+  const ex=$("exercicio").value;
+  const exn=EX_NOME[ex];
+  const pos=$("positivos").value.trim();
+  const errs=[...selected].map(i=>DB[ex][i]);
+  let r=`🎬 ROTEIRO — ${aluno} | ${exn}\n`;
+  r+=`────────────────────────\n\n`;
+  r+=`1) ABERTURA\n"Fala ${aluno}! Analisei seu ${exn}, vamos aos pontos."\n\n`;
+  r+=`2) O QUE JÁ ESTÁ BOM\n${pos?`"${pos}"`:'"[Comece elogiando algo real — gera abertura pro ajuste.]"'}\n\n`;
+  if(errs.length){
+    r+=`3) AJUSTES (${errs.length})\n`;
+    errs.forEach((e,i)=>{
+      r+=`\n   ${i+1}. ${e.n}\n`;
+      r+=`      • O que tá rolando: ${e.d}\n`;
+      r+=`      • Corrige assim: ${e.cue}\n`;
+      r+=`      • Treina com: ${e.drill}\n`;
+    });
+    r+=`\n`;
+  }else{
+    r+=`3) AJUSTES\n   [Marque os erros no checklist à esquerda pra preencher aqui.]\n\n`;
+  }
+  r+=`4) FECHAMENTO\n"Foca${errs.length?' nesses '+errs.length+' ponto'+(errs.length>1?'s':''):' nesse ajuste'} nas próximas séries e me manda o vídeo de novo. Tamo junto! 💪"`;
+  $("roteiro").textContent=r;
+}
+
+/* ---------- Resumo curto pro aluno ---------- */
+function buildMsg(){
+  const aluno=$("aluno").value.trim()||"";
+  const ex=$("exercicio").value;const exn=EX_NOME[ex];
+  const pos=$("positivos").value.trim();
+  const errs=[...selected].map(i=>DB[ex][i]);
+  let m=`${aluno?'Fala '+aluno+'! ':''}Feedback do seu ${exn} 👇\n\n`;
+  if(pos)m+=`✅ Tá bom: ${pos}\n\n`;
+  if(errs.length){
+    m+=`🔧 Ajustes:\n`;
+    errs.forEach((e,i)=>{m+=`${i+1}. ${e.n} → ${e.cue}\n`;});
+    m+=`\n🏋️ Drills: ${errs.map(e=>e.drill).join(" • ")}\n`;
+  }
+  m+=`\nQualquer dúvida me chama. 💪`;
+  return m;
+}
+
+/* ---------- Vídeo ---------- */
+const player=$("player");
+$("filebtn").onclick=()=>$("videoFile").click();
+$("videoFile").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  player.src=URL.createObjectURL(f);
+  player.hidden=false;$("vctrl").hidden=false;$("vhint").hidden=false;$("annoTools").hidden=false;
+  player.playbackRate=parseFloat($("speed").value);
+};
+$("speed").onchange=e=>player.playbackRate=parseFloat(e.target.value);
+$("back").onclick=()=>{player.pause();player.currentTime=Math.max(0,player.currentTime-0.1);};
+$("fwd").onclick=()=>{player.pause();player.currentTime+=0.1;};
+
+/* ---------- Captura de frame ---------- */
+$("capture").onclick=()=>{
+  if(!player.videoWidth){toast("Carregue um vídeo primeiro");return;}
+  const id=++frameId;
+  const cv=document.createElement("canvas");
+  cv.width=player.videoWidth;cv.height=player.videoHeight;
+  cv.getContext("2d").drawImage(player,0,0,cv.width,cv.height);
+
+  const box=$("frames");
+  if(box.querySelector(".empty"))box.innerHTML="";
+  const wrap=document.createElement("div");wrap.className="frame";
+  wrap.appendChild(cv);
+  const bar=document.createElement("div");bar.className="fbar";
+  const del=document.createElement("button");del.textContent="🗑️";del.title="Apagar";
+  const clr=document.createElement("button");clr.textContent="↺ limpar";clr.title="Limpar anotações";
+  const dl=document.createElement("button");dl.textContent="⬇️";dl.title="Baixar PNG";
+  bar.append(clr,dl,del);wrap.appendChild(bar);
+  box.appendChild(wrap);
+
+  // guarda imagem base pra poder limpar anotações
+  const base=cv.toDataURL();
+  enableAnnotate(cv,base);
+  del.onclick=()=>{wrap.remove();if(!box.children.length)box.innerHTML='<div class="empty">Nenhum frame capturado ainda.</div>';};
+  clr.onclick=()=>{const img=new Image();img.onload=()=>cv.getContext("2d").drawImage(img,0,0);img.src=base;};
+  dl.onclick=()=>{const a=document.createElement("a");a.download=`frame-${id}.png`;a.href=cv.toDataURL();a.click();};
+  toast("Frame capturado 📸");
+};
+
+/* ---------- Anotação (seta) ---------- */
+function enableAnnotate(cv,base){
+  const ctx=cv.getContext("2d");let drawing=false,sx,sy,snap;
+  const pos=e=>{const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;
+    return{x:(t.clientX-r.left)*cv.width/r.width,y:(t.clientY-r.top)*cv.height/r.height};};
+  const start=e=>{e.preventDefault();drawing=true;const p=pos(e);sx=p.x;sy=p.y;snap=ctx.getImageData(0,0,cv.width,cv.height);};
+  const move=e=>{if(!drawing)return;e.preventDefault();ctx.putImageData(snap,0,0);const p=pos(e);arrow(ctx,sx,sy,p.x,p.y);};
+  const end=()=>drawing=false;
+  cv.addEventListener("mousedown",start);cv.addEventListener("mousemove",move);
+  window.addEventListener("mouseup",end);
+  cv.addEventListener("touchstart",start);cv.addEventListener("touchmove",move);cv.addEventListener("touchend",end);
+}
+function arrow(ctx,x1,y1,x2,y2){
+  const w=Math.max(3,ctx.canvas.width/180);const head=w*4;
+  const a=Math.atan2(y2-y1,x2-x1);
+  ctx.strokeStyle=annoColor;ctx.fillStyle=annoColor;ctx.lineWidth=w;ctx.lineCap="round";
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-head*Math.cos(a-0.4),y2-head*Math.sin(a-0.4));
+  ctx.lineTo(x2-head*Math.cos(a+0.4),y2-head*Math.sin(a+0.4));
+  ctx.closePath();ctx.fill();
+}
+document.querySelectorAll(".swatch").forEach(s=>s.onclick=()=>{
+  document.querySelectorAll(".swatch").forEach(x=>x.classList.remove("sel"));
+  s.classList.add("sel");annoColor=s.dataset.c;});
+
+/* ---------- Copiar ---------- */
+$("copyRot").onclick=()=>{navigator.clipboard.writeText($("roteiro").textContent).then(()=>toast("Roteiro copiado 📋"));};
+$("copyMsg").onclick=()=>{navigator.clipboard.writeText(buildMsg()).then(()=>toast("Resumo copiado 💬"));};
+
+/* ---------- Listeners ---------- */
+$("exercicio").onchange=renderChecks;
+$("aluno").oninput=buildRoteiro;
+$("positivos").oninput=buildRoteiro;
+
+/* ---------- Init ---------- */
+renderChecks();
+</script>
+</body>
+</html>
