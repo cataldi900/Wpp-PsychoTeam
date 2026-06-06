@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PsychoTeam · Como Organizar Sua Periodização</title>
+
+<!-- Fontes (carregam online; há fallback do sistema offline) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Lora:ital@1&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg:        #0e0b08;
+    --bg-soft:   #161210;
+    --panel:     #1a1611;
+    --gold:      #c8a24a;
+    --gold-soft: #b8862f;
+    --gold-bri:  #e6c66b;
+    --cream:     #ece7dc;
+    --body:      #c4bdae;
+    --muted:     #7c7256;
+    --line:      rgba(200,162,74,.32);
+    --display: "Anton", "Arial Narrow", "Oswald", sans-serif;
+    --serif:   "Lora", Georgia, "Times New Roman", serif;
+    --sans:    "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--body);
+    font-family: var(--sans);
+    overflow: hidden;
+  }
+
+  /* textura de pontinhos sutil, como no ebook */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background-image: radial-gradient(rgba(200,162,74,.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .deck { position: relative; width: 100%; height: 100%; z-index: 1; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(32px, 6vw, 96px);
+    max-width: 1100px;
+    margin: 0 auto;
+    opacity: 0;
+    transition: opacity .45s ease;
+  }
+  .slide.active { display: flex; opacity: 1; }
+
+  /* ---- topo / rodapé padrão das páginas internas ---- */
+  .eyebrow {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: clamp(9px, 1vw, 11px);
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: clamp(28px, 5vh, 56px);
+  }
+  .eyebrow .step { color: var(--gold); }
+
+  .footer {
+    position: absolute;
+    left: clamp(32px, 6vw, 96px);
+    right: clamp(32px, 6vw, 96px);
+    bottom: clamp(20px, 4vh, 40px);
+    font-size: 10px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ---- cabeçalho de seção com círculo numerado ---- */
+  .head { display: flex; align-items: center; gap: clamp(16px, 2vw, 26px); margin-bottom: 10px; }
+  .num {
+    flex: none;
+    width: clamp(52px, 6vw, 74px);
+    height: clamp(52px, 6vw, 74px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-bri), var(--gold-soft));
+    color: #1a1206;
+    font-family: var(--display);
+    font-size: clamp(26px, 3.4vw, 38px);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 24px rgba(200,162,74,.22);
+  }
+  h2.title {
+    font-family: var(--display);
+    font-weight: 400;
+    line-height: .94;
+    letter-spacing: .01em;
+    text-transform: uppercase;
+    color: var(--cream);
+    font-size: clamp(30px, 5vw, 56px);
+  }
+  .subtitle {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--gold);
+    font-size: clamp(16px, 2.1vw, 23px);
+    margin: 14px 0 clamp(20px, 3vh, 32px);
+    line-height: 1.35;
+  }
+
+  p.body {
+    font-size: clamp(14px, 1.55vw, 18px);
+    line-height: 1.62;
+    color: var(--body);
+    max-width: 880px;
+    margin-bottom: 16px;
+  }
+  p.body b, p.body strong { color: var(--cream); font-weight: 700; }
+  .hl { color: var(--gold); font-weight: 600; }
+
+  /* ---- tabela estilo ebook ---- */
+  table.plan {
+    width: 100%;
+    border-collapse: collapse;
+    margin: clamp(14px, 2.5vh, 26px) 0;
+    font-size: clamp(13px, 1.45vw, 16px);
+  }
+  table.plan th {
+    text-align: left;
+    font-size: clamp(9px, 1vw, 11px);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    padding: 0 14px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  table.plan td {
+    padding: 16px 14px;
+    border-bottom: 1px solid rgba(200,162,74,.12);
+    color: var(--body);
+    vertical-align: middle;
+  }
+  table.plan td.lead { color: var(--cream); font-weight: 600; }
+  table.plan td.role { color: var(--muted); letter-spacing: .14em; font-size: .82em; text-transform: uppercase; }
+  .pill {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    border-radius: 999px;
+    padding: 5px 13px;
+    font-size: .82em;
+    letter-spacing: .06em;
+    white-space: nowrap;
+  }
+
+  /* ---- caixa de callout (ponto de autoanálise) ---- */
+  .callout {
+    background: var(--panel);
+    border-left: 3px solid var(--gold);
+    padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.4vw, 28px);
+    margin-top: clamp(14px, 2vh, 24px);
+    max-width: 880px;
+  }
+  .callout .lab {
+    font-size: clamp(9px, 1vw, 11px);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .callout p {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--body);
+    line-height: 1.5;
+    font-size: clamp(13px, 1.5vw, 17px);
+  }
+
+  /* ---- capa ---- */
+  .cover { justify-content: flex-start; padding-top: clamp(40px, 9vh, 110px); }
+  .brand {
+    font-size: clamp(11px, 1.3vw, 14px);
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: clamp(40px, 9vh, 90px);
+  }
+  .cover h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: .9;
+    color: var(--cream);
+    font-size: clamp(46px, 9vw, 104px);
+    letter-spacing: .005em;
+  }
+  .cover h1 .sua { color: var(--gold); display: block; }
+  .cover .lede {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--gold);
+    font-size: clamp(17px, 2.4vw, 26px);
+    line-height: 1.4;
+    margin: clamp(20px, 3vh, 34px) 0 0;
+    padding-top: clamp(18px, 2.5vh, 28px);
+    border-top: 1px solid var(--line);
+    max-width: 620px;
+  }
+  .cover .tags {
+    margin-top: clamp(34px, 7vh, 80px);
+    font-size: clamp(11px, 1.3vw, 14px);
+    letter-spacing: .12em;
+    color: var(--muted);
+  }
+  .cover .by { color: var(--gold); font-weight: 600; margin-top: 8px; }
+
+  /* ---- slide de vídeo de exemplo ---- */
+  .vid-wrap { width: 100%; max-width: 940px; margin: clamp(10px,2vh,20px) auto 0; }
+  .frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  }
+  .frame video { width: 100%; height: 100%; object-fit: contain; background: #000; display: block; }
+  /* placeholder quando o vídeo ainda não foi adicionado */
+  .placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; text-align: center;
+    background: repeating-linear-gradient(45deg, #141009, #141009 14px, #181308 14px, #181308 28px);
+    color: var(--muted);
+  }
+  .placeholder .play {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .placeholder .play::after {
+    content: ""; border-style: solid;
+    border-width: 11px 0 11px 18px;
+    border-color: transparent transparent transparent var(--gold);
+    margin-left: 4px;
+  }
+  .placeholder code { color: var(--gold); font-size: 13px; letter-spacing: .04em; }
+  .placeholder small { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+
+  /* ---- encerramento / CTA ---- */
+  .closing { align-items: center; text-align: center; }
+  .closing h1 {
+    font-family: var(--display); font-weight: 400; text-transform: uppercase;
+    color: var(--cream); line-height: .92; font-size: clamp(40px, 7vw, 78px);
+  }
+  .closing h1 .alt { color: var(--gold); display:block; }
+  .closing .rule { width: clamp(120px, 30vw, 360px); height: 1px; background: var(--gold); margin: clamp(20px,3vh,30px) auto; }
+  .closing p.body { text-align: center; margin: 0 auto 18px; }
+  .cta {
+    display: inline-block;
+    margin-top: clamp(16px,3vh,26px);
+    padding: 16px 40px;
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--gold-bri), var(--gold-soft));
+    color: #1a1206;
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-decoration: none;
+    font-size: clamp(15px,1.8vw,19px);
+    box-shadow: 0 8px 28px rgba(200,162,74,.28);
+  }
+  .cta-sub { margin-top: 12px; color: var(--gold); letter-spacing: .08em; font-size: 13px; }
+
+  /* ---- navegação ---- */
+  .nav {
+    position: fixed; bottom: 18px; right: 22px; z-index: 30;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav button {
+    width: 40px; height: 40px;
+    border: 1px solid var(--line);
+    background: rgba(20,16,10,.85);
+    color: var(--gold);
+    border-radius: 8px;
+    font-size: 18px; cursor: pointer;
+    transition: border-color .2s, color .2s;
+  }
+  .nav button:hover { border-color: var(--gold); color: var(--gold-bri); }
+  .counter { color: var(--muted); font-size: 13px; letter-spacing: .1em; min-width: 54px; text-align: center; }
+
+  .progress {
+    position: fixed; top: 0; left: 0; height: 3px; z-index: 30;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bri));
+    width: 0; transition: width .35s ease;
+  }
+
+  .dots { position: fixed; bottom: 22px; left: 22px; z-index: 30; display: flex; gap: 7px; }
+  .dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(200,162,74,.25); cursor: pointer; transition: background .2s, transform .2s;
+  }
+  .dots span.on { background: var(--gold); transform: scale(1.25); }
+
+  .hint {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 20; color: var(--muted); font-size: 11px; letter-spacing: .16em;
+    text-transform: uppercase; pointer-events: none;
+    transition: opacity .5s; opacity: .8;
+  }
+  @media (max-width: 640px){ .hint, .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 0 · CAPA -->
+  <section class="slide cover active">
+    <div class="brand">P S Y C H O T E A M</div>
+    <h1>COMO ORGANIZAR<span class="sua">SUA</span>PERIODIZAÇÃO</h1>
+    <p class="lede">Um guia direto pra distribuir agachamento, supino e terra na semana, com a função certa pra cada sessão.</p>
+    <div class="tags">
+      Treinamento de Força · Powerlifting · Hipertrofia
+      <div class="by">por Guilherme Moreti · Coach PsychoTeam</div>
+    </div>
+  </section>
+
+  <!-- 1 -->
+  <section class="slide">
+    <div class="eyebrow"><span>PsychoTeam · Como Organizar Sua Periodização</span><span class="step">Passo 1 de 5</span></div>
+    <div class="head"><div class="num">1</div><h2 class="title">A Frequência<br>Nasce da Recuperação</h2></div>
+    <p class="subtitle">Antes de espalhar exercício pela semana, decide pra que serve cada sessão.</p>
+    <p class="body">Organizar periodização não é lotar a semana de treino. É decidir <b>quantas vezes</b> você toca cada padrão e, mais importante que isso, <b>pra que serve</b> cada sessão. Quem manda nessa conta é a sua recuperação, não a sua vontade de treinar.</p>
+    <p class="body">Na prática, o que funciona pra maioria é trabalhar cada grande levantamento em dois papéis: um <span class="hl">movimento principal</span> e uma <span class="hl">variação</span>. O principal leva a intensidade um pouco maior e é onde você busca progredir. A variação puxa menos e começa bem mais leve, lá em <b>RPE 5 a 6</b>.</p>
+    <div class="callout">
+      <div class="lab">Ponto de Autoanálise</div>
+      <p>Olha a sua semana de hoje: cada exercício tem um papel claro ou tá todo mundo "pesado" brigando pela mesma recuperação? Se é tudo principal, no fim das contas nada é principal.</p>
+    </div>
+    <div class="footer">Material exclusivo. Reprodução proibida sem autorização. · 1</div>
+  </section>
+
+  <!-- VÍDEO DE EXEMPLO A -->
+  <section class="slide">
+    <div class="eyebrow"><span>PsychoTeam · Exemplo em vídeo</span><span class="step">Principal × Variação</span></div>
+    <div class="head"><h2 class="title" style="font-size:clamp(26px,4vw,46px)">Exemplo: Principal vs. Variação</h2></div>
+    <p class="subtitle">Veja na prática a diferença de execução entre as duas funções.</p>
+    <div class="vid-wrap">
+      <div class="frame">
+        <!-- Troque o src pelo seu arquivo em videos/ -->
+        <video controls preload="metadata" src="videos/exemplo-1.mp4"></video>
+        <div class="placeholder">
+          <div class="play"></div>
+          <small>Espaço reservado para o vídeo</small>
+          <code>videos/exemplo-1.mp4</code>
+        </div>
+      </div>
+    </div>
+    <div class="footer">Material exclusivo. Reprodução proibida sem autorização.</div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <div class="eyebrow"><span>PsychoTeam · Como Organizar Sua Periodização</span><span class="step">Passo 2 de 5</span></div>
+    <div class="head"><div class="num">2</div><h2 class="title">Agachamento:<br>Principal e Variação</h2></div>
+    <p class="subtitle">Pra maioria, dois agachamentos na semana é o ponto certo.</p>
+    <p class="body">Pela recuperação da maior parte das pessoas, <b>dois agachamentos por semana</b> costuma ser o equilíbrio: dá estímulo de sobra pra progredir sem cobrar mais do que o corpo devolve. O segredo é deixar um como principal e o outro como variação.</p>
+    <table class="plan">
+      <thead><tr><th>Sessão</th><th>Exemplo</th><th>Série × Reps</th><th>Intensidade</th></tr></thead>
+      <tbody>
+        <tr><td class="lead">Principal</td><td>Back Squat</td><td>4 × 4</td><td><span class="pill">RPE 6,5 → progride</span></td></tr>
+        <tr><td class="lead">Variação</td><td>Pause Squat</td><td>3 × 6</td><td><span class="pill">RPE 5 a 6</span></td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <div class="lab">Como Conduzir nas Semanas</div>
+      <p>No principal, a carga sobe e o RPE acompanha o bloco. Na variação, segura a mão: melhor manter a técnica limpa e deixar o RPE subir devagar do que correr atrás de carga toda semana.</p>
+    </div>
+    <div class="footer">Material exclusivo. Reprodução proibida sem autorização. · 2</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <div class="eyebrow"><span>PsychoTeam · Como Organizar Sua Periodização</span><span class="step">Passo 3 de 5</span></div>
+    <div class="head"><div class="num">3</div><h2 class="title">Supino: Principal,<br>Variação e Volume</h2></div>
+    <p class="subtitle">Supino recupera fácil, então dá pra colocar uma terceira sessão.</p>
+    <p class="body">O supino segue a mesma ideia do agachamento: principal com intensidade um pouco maior, variação mais leve. Só que, como ele cansa menos, dá pra <b>colocar ainda uma terceira sessão</b>, com <span class="hl">volume mais alto e intensidade baixa</span>.</p>
+    <table class="plan">
+      <thead><tr><th>Dia</th><th>Exercício</th><th>Série × Reps</th><th>Intensidade</th><th>Papel</th></tr></thead>
+      <tbody>
+        <tr><td class="lead">Segunda</td><td>Paused Bench Press</td><td>3 × 3</td><td><span class="pill">RPE 6,5</span></td><td class="role">Principal</td></tr>
+        <tr><td class="lead">Quarta</td><td>Pin Press</td><td>3 × 5</td><td><span class="pill">RPE 6</span></td><td class="role">Variação</td></tr>
+        <tr><td class="lead">Sexta</td><td>Paused Bench Press</td><td>3 × 8</td><td><span class="pill">RPE 4 a 5</span></td><td class="role">Volume</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <div class="lab">A Leitura da Semana</div>
+      <p>Começa pesado e com pouca rep (o principal), passa pela variação no meio e termina em volume alto com RPE baixo. A semana inteira gira em torno de proteger o principal.</p>
+    </div>
+    <div class="footer">Material exclusivo. Reprodução proibida sem autorização. · 3</div>
+  </section>
+
+  <!-- VÍDEO DE EXEMPLO B -->
+  <section class="slide">
+    <div class="eyebrow"><span>PsychoTeam · Exemplo em vídeo</span><span class="step">Supino · execução</span></div>
+    <div class="head"><h2 class="title" style="font-size:clamp(26px,4vw,46px)">Exemplo: Paused Bench Press</h2></div>
+    <p class="subtitle">Ritmo da pausa e controle da barra na sessão principal.</p>
+    <div class="vid-wrap">
+      <div class="frame">
+        <video controls preload="metadata" src="videos/exemplo-2.mp4"></video>
+        <div class="placeholder">
+          <div class="play"></div>
+          <small>Espaço reservado para o vídeo</small>
+          <code>videos/exemplo-2.mp4</code>
+        </div>
+      </div>
+    </div>
+    <div class="footer">Material exclusivo. Reprodução proibida sem autorização.</div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <div class="eyebrow"><span>PsychoTeam · Como Organizar Sua Periodização</span><span class="step">Passo 4 de 5</span></div>
+    <div class="head"><div class="num">4</div><h2 class="title">Terra: Menos<br>é Mais no Início</h2></div>
+    <p class="subtitle">Pra quem tá começando, uma vez na semana já resolve.</p>
+    <p class="body">O terra é o que mais pesa na recuperação dos três. Por isso, pra muita gente — <b>principalmente quem tá começando agora</b> — uma sessão de terra por semana já basta pra evoluir de forma consistente.</p>
+    <p class="body">Como é só uma exposição, ela pode vir com <span class="hl">intensidade mais alta</span> e pouca repetição, concentrando ali todo o estímulo de força. Algo na linha de:</p>
+    <table class="plan">
+      <thead><tr><th>Sessão</th><th>Exemplo</th><th>Série × Reps</th><th>Intensidade</th></tr></thead>
+      <tbody>
+        <tr><td class="lead">Terra (1× / semana)</td><td>Deadlift</td><td>3 × 4</td><td><span class="pill">RPE 6,5</span></td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <div class="lab">Ponto de Autoanálise</div>
+      <p>Seu terra te deixa quebrado por dias e ainda atrapalha o agachamento? Então é frequência ou intensidade demais pro seu momento. Uma sessão bem dosada rende mais que duas mal recuperadas.</p>
+    </div>
+    <div class="footer">Material exclusivo. Reprodução proibida sem autorização. · 4</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <div class="eyebrow"><span>PsychoTeam · Como Organizar Sua Periodização</span><span class="step">Passo 5 de 5</span></div>
+    <div class="head"><div class="num">5</div><h2 class="title">Montando<br>a Semana</h2></div>
+    <p class="subtitle">Juntando tudo: 2 agachamentos, 3 supinos e 1 terra.</p>
+    <p class="body">Com os papéis definidos, a semana praticamente se monta sozinha — com principal e volume bem longe um do outro e as variações no meio:</p>
+    <table class="plan">
+      <thead><tr><th>Dia</th><th>Exercício</th><th>Série × Reps</th><th>Intensidade</th><th>Papel</th></tr></thead>
+      <tbody>
+        <tr><td class="lead">Segunda</td><td>Back Squat<br>+ Paused Bench Press</td><td>4 × 4<br>3 × 3</td><td><span class="pill">RPE 6,5</span></td><td class="role">Agacho princ.<br>Supino princ.</td></tr>
+        <tr><td class="lead">Quarta</td><td>Pin Press<br>+ Deadlift</td><td>3 × 5<br>3 × 4</td><td><span class="pill">RPE 6 / 6,5</span></td><td class="role">Supino var.<br>Terra</td></tr>
+        <tr><td class="lead">Sexta</td><td>Pause Squat<br>+ Paused Bench Press</td><td>3 × 6<br>3 × 8</td><td><span class="pill">RPE 5–6 / 4–5</span></td><td class="role">Agacho var.<br>Supino vol.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <div class="lab">O Princípio por Trás do Mapa</div>
+      <p>Cada padrão tem um principal que progride, variações que sustentam o volume e um respiro entre as cargas mais altas. Troca os exercícios à vontade. O que não muda é a função de cada sessão.</p>
+    </div>
+    <div class="footer">Material exclusivo. Reprodução proibida sem autorização. · 5</div>
+  </section>
+
+  <!-- ENCERRAMENTO -->
+  <section class="slide closing">
+    <div class="brand">P S Y C H O T E A M</div>
+    <h1>ISSO É UM PONTO<span class="alt">DE PARTIDA</span></h1>
+    <div class="rule"></div>
+    <p class="body">Essas diretrizes servem pra maioria, mas <b>não substituem a avaliação individual</b> de cada pessoa. Histórico, ponto fraco, rotina e recuperação mudam tudo.</p>
+    <p class="body" style="font-family:var(--serif);font-style:italic;color:var(--body)">Na PsychoTeam todo aluno começa com uma avaliação individual completa. Treino e nutrição montados pro seu corpo, do começo ao fim da jornada.</p>
+    <a class="cta" href="https://wa.me/message/546BBW7RMFXRB1" target="_blank" rel="noopener">Fale comigo no WhatsApp →</a>
+    <div class="cta-sub">wa.me/message/546BBW7RMFXRB1</div>
+  </section>
+
+</div>
+
+<!-- UI -->
+<div class="progress" id="bar" style="display:none"></div>
+<div class="dots" id="dots"></div>
+<div class="hint" id="hint">← → ou espaço para navegar · F = tela cheia</div>
+<div class="nav">
+  <button id="prev" aria-label="Anterior">‹</button>
+  <span class="counter" id="counter">1 / 1</span>
+  <button id="next" aria-label="Próximo">›</button>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let i = 0;
+
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const dotsWrap = document.getElementById('dots');
+  const hint = document.getElementById('hint');
+
+  slides.forEach((_, idx) => {
+    const d = document.createElement('span');
+    d.addEventListener('click', () => go(idx));
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function pauseAllVideos(except) {
+    document.querySelectorAll('video').forEach(v => { if (v !== except) v.pause(); });
+  }
+
+  function go(n) {
+    i = Math.max(0, Math.min(total - 1, n));
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    dots.forEach((d, idx) => d.classList.toggle('on', idx === i));
+    counter.textContent = (i + 1) + ' / ' + total;
+    progress.style.width = ((i) / (total - 1) * 100) + '%';
+    pauseAllVideos();
+    if (i > 0 && hint) { hint.style.opacity = 0; }
+  }
+  function next() { go(i + 1); }
+  function prev() { go(i - 1); }
+
+  document.getElementById('next').onclick = next;
+  document.getElementById('prev').onclick = prev;
+
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(total - 1);
+    else if (e.key.toLowerCase() === 'f') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    }
+  });
+
+  // swipe no celular
+  let x0 = null;
+  document.addEventListener('touchstart', e => x0 = e.touches[0].clientX, {passive:true});
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+    x0 = null;
+  }, {passive:true});
+
+  // esconde o vídeo placeholder automaticamente se o arquivo existir
+  document.querySelectorAll('.frame video').forEach(v => {
+    v.addEventListener('loadeddata', () => {
+      const ph = v.parentElement.querySelector('.placeholder');
+      if (ph) ph.style.display = 'none';
+    });
+  });
+
+  go(0);
+</script>
+</body>
+</html>
