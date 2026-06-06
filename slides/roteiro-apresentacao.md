@@ -70,17 +70,19 @@ de carga, ao custo de ombro. Mais fechado, mais tríceps e mais amplitude. No es
 pegada larga moveu um pouco mais, e a fechada acendeu mais o tríceps. Mas não saia mudando tudo: varia de
 dois a cinco dedos por bloco, fixa o resto, e a gente decide junto pela velocidade e pelo conforto do ombro."
 
-**Slide 11 — Bulldog grip.** *(vídeo: demonstração)*
+**Slide 11 — Bulldog grip.** *(vídeos: demonstração + passo a passo de como fazer)*
 "A pegada padrão deixa a barra alta nos dedos com o punho jogado pra trás — dói e a barra tomba. A bulldog
 resolve: gira a mão um pouco pra dentro e crava a barra na base da palma, em cima do osso. O punho fica
 reto, a força sobe em linha reta. E sou honesto com você: isso não tem estudo de EMG, é argumento de
-posicionamento — mas funciona pra dor de punho e pra estabilidade."
+posicionamento — mas funciona pra dor de punho e pra estabilidade. Usa o vídeo de passo a passo pra guiar
+o aluno mão a mão até ele fechar a pegada certa."
 
-**Slide 12 — A pilastra.**
+**Slide 12 — A pilastra.** *(vídeo: descompasso cotovelo × barra)*
 "Esse é o cue que mais muda supino. Imagina uma coluna sustentando um teto: reta, aguenta tudo; inclinada,
 cede. Seu antebraço é essa coluna. No fundo do movimento ele tem que estar vertical, barra empilhada sobre
 o punho e o cotovelo. Quando o cotovelo escapa pra frente, vira alavanca: a barra tomba, a força vira
-torque e o ombro paga a conta. Verifica filmando de lado: barra, punho e cotovelo na mesma vertical."
+torque e o ombro paga a conta. Verifica filmando de lado: barra, punho e cotovelo na mesma vertical. Roda
+o vídeo do descompasso pra mostrar o erro acontecendo ao vivo."
 
 **Slide 13 — Escápula.** *(vídeos: escápula 1 e 2)*
 "Pra empurrar forte você precisa de chão pra empurrar. No supino esse chão é a escápula cravada: retrai,
@@ -91,9 +93,10 @@ hora de tirar a barra do gancho — saia com o spotter se precisar."
 
 **Slide 14 — A ponte.**
 "A ponte faz três coisas: encurta o caminho da barra, vira um leve declinado que favorece o peito de
-baixo, e cria base rígida. Mas seja honesto: não é garantia de mais quilos. Tem dado em powerlifter
-mostrando diferença praticamente zero entre plano e arqueado — o ganho depende de quanto ela encurta a SUA
-amplitude. E o alerta: ponte exagerada com amplitude minúscula esbarra na regra do cotovelo."
+baixo, e cria base rígida. E isso não é detalhe — a diferença é SIGNIFICATIVA: quando você encurta o
+trajeto e melhora a alavanca, levanta mais peso de verdade. Por isso a ponte é parte do supino de força,
+não enfeite. O único alerta é regulatório: ponte exagerada com amplitude minúscula esbarra na regra do
+cotovelo — então faça a ponte, mas o cotovelo ainda tem que quebrar a linha do ombro."
 
 **Slide 15 — Mobilidade.** *(vídeos: torácica e quadríceps)*
 "Não adianta querer ponte de campeão com costas travadas. Duas frentes: extensão da torácica, com

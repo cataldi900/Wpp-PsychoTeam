@@ -24,7 +24,9 @@ Deck de apresentação interativo da aula de supino reto, no padrão visual dos 
 
 **Google Drive (demonstrações da pasta "Slides supino"):**
 - Slide 7 profundidade — `1UByEmEy5gSbr_rFqy7YqQ9uI-9jSzUF4`
-- Slide 11 bulldog — `1CrXIQIZvMdRjsRuJ5awhSXfuDzyPZaZ7`
+- Slide 11 bulldog (demonstração) — `1CrXIQIZvMdRjsRuJ5awhSXfuDzyPZaZ7`
+- Slide 11 bulldog (passo a passo) — `17gln2KDcLYQd22Pzsv7cZLnw6xRSlowB`
+- Slide 12 pilastra (descompasso cotovelo × barra) — `1Ta538bmgU0pPzf9qpfcnMFVEwZHpEdll`
 - Slide 13 escápula — `1Qj_Lw0b7UQPTPyQ-jk8CoEZDK9j4KoaR`, `13PlbhfzfWdG0v2y-IF_0Ry6DCUG0HG5f`
 - Slide 15 mobilidade — `1a77w2qbI7RIZXAR7tU9mPyV_LadxJt4d`, `1HoteBbWNG_LwDpMXvqllKT3YoW9tY3ck`
 - Slide 21 Spoto demo — `1eqczyCxRhE3vKOouLddlvs3uZ1_Uu_X9`
