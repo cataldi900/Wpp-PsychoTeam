@@ -27,11 +27,9 @@ Deck de apresentação interativo da aula de supino reto, no padrão visual dos 
 - Slide 15 mobilidade — `1a77w2qbI7RIZXAR7tU9mPyV_LadxJt4d`, `1HoteBbWNG_LwDpMXvqllKT3YoW9tY3ck`
 - Slide 21 Spoto demo — `1eqczyCxRhE3vKOouLddlvs3uZ1_Uu_X9`
 
-## ⚠️ Importante: liberar os vídeos do Drive
-Para os MP4 do Drive tocarem embutidos no slide, a pasta **"Slides supino"** precisa estar
-compartilhada como **"Qualquer pessoa com o link"**:
+## Compartilhamento dos vídeos
+Os 7 MP4 da pasta **"Slides supino"** já estão como **"Qualquer pessoa com o link" (Leitor)**,
+então tocam embutidos sem ajuste nenhum. Os vídeos do YouTube também funcionam direto.
 
-> Google Drive → botão direito na pasta **Slides supino** → **Compartilhar** →
-> em "Acesso geral", trocar para **Qualquer pessoa com o link** (Leitor) → Concluir.
-
-Os vídeos do YouTube já funcionam sem nenhum ajuste.
+> Se algum dia um vídeo do Drive parar de carregar, confira se ele continua compartilhado:
+> botão direito no arquivo → **Compartilhar** → "Acesso geral" = **Qualquer pessoa com o link**.
