@@ -4,8 +4,10 @@ Deck de apresentação interativo da aula de supino reto, no padrão visual dos 
 (fundo preto quente, dourado metálico, títulos condensados, serifa itálica nas linhas-guia).
 
 ## Arquivos
-- **`supino-engenharia.html`** — o deck. Abre direto no navegador (Chrome/Edge), arquivo único.
+- **`supino-engenharia.html`** — o deck interativo. Abre no navegador (PC), vídeos tocam embutidos.
+- **`supino-engenharia.pdf`** — versão para **celular**. Abre nativo em qualquer telefone; cada vídeo é um card clicável que abre no YouTube/Drive ao tocar.
 - **`roteiro-apresentacao.md`** — script de fala para apresentar sem ler os slides.
+- **`build-pdf.js`** — gera o PDF a partir do HTML (`node slides/build-pdf.js && weasyprint /tmp/print.html slides/supino-engenharia.pdf`).
 
 ## Como apresentar
 1. Abra `supino-engenharia.html` no navegador.
