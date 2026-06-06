@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Engenharia do Supino — PsychoTeam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0b08; --bg2:#070605; --panel:#151209; --panel2:#1c1810;
+  --gold:#c8a24a; --gold-2:#e6c463; --gold-deep:#9c7a2e;
+  --cream:#ece6d8; --cream-dim:#b9b1a0; --muted:#8a8273; --line:#2a2519;
+  --red:#c0563f; --green:#7fae57;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:radial-gradient(120% 120% at 80% -10%, #1a160d 0%, var(--bg) 45%, var(--bg2) 100%);
+  color:var(--cream); font-family:'Inter',system-ui,sans-serif;
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+}
+/* ---------- stage ---------- */
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{position:relative;width:1280px;height:720px;transform-origin:center center}
+.slide{
+  position:absolute;inset:0;display:none;flex-direction:column;
+  padding:56px 72px 50px; background:linear-gradient(160deg,#100d08 0%, #0a0907 100%);
+  border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  box-shadow:0 40px 120px -40px #000;
+}
+.slide.active{display:flex;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ghost{position:absolute;right:-30px;bottom:-90px;font-family:'Anton';font-size:520px;line-height:1;color:#ffffff06;pointer-events:none;user-select:none}
+/* header */
+.head{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.head .r{color:var(--gold)}
+.rule{height:1px;background:linear-gradient(90deg,var(--gold-deep),transparent);margin:12px 0 0}
+/* titles */
+.eyebrow{font-size:13px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1.title,h2.title{font-family:'Anton';font-weight:400;text-transform:uppercase;line-height:.96;letter-spacing:.5px}
+h2.title{font-size:54px;margin-top:6px}
+.title .g{color:var(--gold)}
+.lead{font-family:'Lora';font-style:italic;color:var(--gold-2);font-size:21px;line-height:1.4;margin-top:14px;max-width:78%}
+.body{margin-top:22px;font-size:18px;line-height:1.5;color:var(--cream-dim)}
+.body strong{color:var(--cream);font-weight:600}
+.numbadge{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;background:linear-gradient(145deg,var(--gold-2),var(--gold-deep));color:#15110a;font-family:'Anton';font-size:24px;flex:none}
+/* layout helpers */
+.content{flex:1;display:flex;flex-direction:column;justify-content:center}
+.titlerow{display:flex;gap:16px;align-items:flex-start}
+.cards{display:grid;gap:14px;margin-top:8px}
+.cards.c2{grid-template-columns:1fr 1fr}
+.cards.c3{grid-template-columns:repeat(3,1fr)}
+.cards.c4{grid-template-columns:repeat(2,1fr)}
+.card{background:linear-gradient(160deg,var(--panel),#0e0b07);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:16px 18px}
+.card h4{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:700}
+.card p{font-size:15.5px;line-height:1.45;color:var(--cream-dim)}
+.card p strong{color:var(--cream)}
+ul.clean{list-style:none;display:flex;flex-direction:column;gap:11px;margin-top:6px}
+ul.clean li{position:relative;padding-left:26px;font-size:18px;line-height:1.45;color:var(--cream-dim)}
+ul.clean li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;background:var(--gold);border-radius:2px;transform:rotate(45deg)}
+ul.clean li strong{color:var(--cream)}
+.callout{margin-top:18px;background:#ffffff05;border-left:3px solid var(--gold);border-radius:6px;padding:14px 18px}
+.callout .k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.callout p{font-family:'Lora';font-style:italic;color:var(--cream);font-size:16.5px;line-height:1.45;margin-top:6px}
+.pill{display:inline-block;border:1px solid var(--gold-deep);color:var(--gold-2);border-radius:20px;padding:2px 12px;font-size:13px;font-weight:600}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center;flex:1}
+.split.v{grid-template-columns:1.05fr .95fr}
+.judge{display:flex;gap:14px;margin-top:10px}
+.judge .j{flex:1;border-radius:10px;padding:12px 14px;font-weight:600}
+.judge .ok{background:#1d2614;border:1px solid #3c5226;color:var(--green)}
+.judge .no{background:#271612;border:1px solid #532a22;color:var(--red)}
+.judge .j span{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:3px}
+/* video */
+.vwrap{display:grid;gap:12px}
+.vwrap.two{grid-template-columns:1fr 1fr}
+.video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#000;cursor:pointer}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video .poster{position:absolute;inset:0;background-size:cover;background-position:center;filter:saturate(.9) contrast(1.02)}
+.video .ovl{position:absolute;inset:0;background:linear-gradient(180deg,#0008,#000a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:.25s}
+.video:hover .ovl{background:linear-gradient(180deg,#0006,#0009)}
+.video .play{width:64px;height:64px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px -6px var(--gold-deep);transition:.2s}
+.video:hover .play{transform:scale(1.08)}
+.video .play svg{margin-left:4px}
+.video .vlabel{position:absolute;left:12px;bottom:12px;font-size:12px;letter-spacing:.06em;color:var(--cream);background:#000a;padding:5px 11px;border-radius:20px;border:1px solid var(--line)}
+.video .drivebg{position:absolute;inset:0;background:radial-gradient(120% 120% at 30% 10%,#241d10,#0c0a07)}
+.vcap{font-size:13px;color:var(--muted);text-align:center}
+/* section divider */
+.divider{align-items:flex-start;justify-content:center}
+.divider .part{font-size:15px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;font-weight:600}
+.divider h2.title{font-size:78px;margin-top:14px;max-width:92%}
+.divider .lead{font-size:24px;max-width:70%}
+/* cta */
+.cta{align-items:center;text-align:center;justify-content:center}
+.cta h2.title{font-size:64px}
+.cta .btn{margin-top:26px;display:inline-block;background:linear-gradient(145deg,var(--gold-2),var(--gold-deep));color:#140f06;font-weight:700;font-size:20px;padding:16px 40px;border-radius:10px;text-decoration:none;letter-spacing:.02em}
+.cta .wa{margin-top:12px;color:var(--gold);font-size:14px;letter-spacing:.08em}
+.cta .disc{margin-top:18px;max-width:60%;color:var(--cream-dim);font-size:16px;line-height:1.5}
+/* footer in slide */
+.foot{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#5d574a;margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+/* ---------- chrome ---------- */
+#bar{position:fixed;left:0;top:0;height:3px;background:var(--gold);z-index:30;transition:width .3s}
+#ctrl{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;background:#0c0a06cc;border:1px solid var(--line);border-radius:30px;padding:7px 16px;z-index:30;backdrop-filter:blur(6px)}
+#ctrl button{background:none;border:0;color:var(--cream-dim);cursor:pointer;font-size:18px;line-height:1;padding:4px 6px;border-radius:6px}
+#ctrl button:hover{color:var(--gold)}
+#ctrl .count{font-size:12px;color:var(--muted);min-width:54px;text-align:center;font-variant-numeric:tabular-nums}
+#hint{position:fixed;top:12px;right:16px;font-size:11px;color:#56503f;z-index:30;letter-spacing:.04em}
+#notes{position:fixed;right:0;top:0;bottom:0;width:380px;background:#0a0806f2;border-left:1px solid var(--line);z-index:40;transform:translateX(100%);transition:.3s;padding:26px 24px;overflow:auto}
+#notes.open{transform:none}
+#notes h3{font-family:'Anton';color:var(--gold);font-size:20px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+#notes .nsub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+#notes p{font-size:15px;line-height:1.6;color:var(--cream-dim);margin-bottom:12px}
+#notes p strong{color:var(--cream)}
+@media (max-width:680px){#hint{display:none}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"><div id="deck"></div></div>
+<div id="hint">← → navega · F tela cheia · N notas do apresentador</div>
+<div id="ctrl">
+  <button id="prev" title="Anterior">‹</button>
+  <span class="count" id="count">1 / 1</span>
+  <button id="next" title="Próximo">›</button>
+  <button id="notesBtn" title="Notas (N)">🎤</button>
+  <button id="fs" title="Tela cheia (F)">⛶</button>
+</div>
+<div id="notes">
+  <h3 id="nTitle">Notas</h3>
+  <div class="nsub" id="nSub"></div>
+  <div id="nBody"></div>
+</div>
+
+<script>
+/* ============== DATA ============== */
+const SEC = "A Engenharia do Supino";
+const yt = (id,label)=>({type:"yt",id,label});
+const dr = (id,label)=>({type:"drive",id,label});
+
+const SLIDES = [
+/* 1 — CAPA */
+{kind:"cover", section:"PsychoTeam",
+ html:`<div class="content">
+   <div class="eyebrow">P S Y C H O T E A M</div>
+   <h1 class="title" style="font-size:88px;margin-top:30px">A ENGENHARIA<br>DO <span class="g">SUPINO</span></h1>
+   <div class="lead" style="max-width:60%">Técnica, regras da IPF e variações com propósito — o porquê de cada detalhe, não só o como.</div>
+ </div>
+ <div class="foot"><span>Treinamento de Força · Powerlifting · Hipertrofia</span><span>por Guilherme Moreti · Coach PsychoTeam</span></div>
+ <div class="ghost">S</div>`,
+ notes:`Abre com a promessa da aula. "Hoje a gente não vai só repetir 'desce e sobe a barra'. A gente vai entender a engenharia do supino: por que cada detalhe existe, o que é regra da federação, o que é mecânica e o que é só achismo de plataforma. No fim você vai conseguir olhar pra um supino e saber se ele é válido, e mais: saber consertar o que tá fraco." Respira, conexão com o aluno, e segue.`},
+
+/* 2 — OBJETIVOS */
+{kind:"std", section:"Objetivos da aula", num:"",
+ title:`O QUE VOCÊ VAI <span class="g">DOMINAR</span>`,
+ lead:`Quatro entregas concretas até o fim da aula.`,
+ html:`<div class="cards c4" style="margin-top:18px">
+   <div class="card"><h4>01 · Ler o movimento</h4><p>Reconhecer na hora o que torna uma tentativa <strong>válida ou nula</strong> sob arbitragem IPF.</p></div>
+   <div class="card"><h4>02 · Montar o setup</h4><p>Construir pegada, escápula, ponte e leg drive de forma <strong>reprodutível</strong>.</p></div>
+   <div class="card"><h4>03 · Entender o porquê</h4><p>Separar <strong>mecânica, regra e evidência</strong> — e parar de copiar achismo.</p></div>
+   <div class="card"><h4>04 · Escolher certo</h4><p>Decidir o <strong>tipo de toque</strong> e a <strong>variação</strong> certa pro seu ponto fraco.</p></div>
+ </div>`,
+ notes:`Aqui você vende a aula em 20 segundos. Passa pelos quatro pontos sem ler palavra por palavra: "primeiro, você vai saber ler um supino — válido ou queimado. Segundo, montar o setup sempre igual, porque consistência é força. Terceiro, entender o porquê de cada coisa, que é o que separa quem treina de quem só malha. E quarto, escolher o toque e a variação certa pro SEU caso." Promete e segue.`},
+
+/* 3 — DIVIDER PARTE 1 */
+{kind:"divider", section:"Parte 1", part:"Parte 1",
+ title:`A MOLDURA:<br>AS REGRAS DA <span class="g">IPF</span>`,
+ lead:`Toda decisão técnica acontece dentro das regras. Primeiro a moldura, depois a arte.`,
+ notes:`Transição. "Antes de falar de técnica, a gente precisa da moldura. No powerlifting, a regra não é detalhe burocrático — ela define o que conta como levantamento. Base aqui é o livro de regras da IPF, com as mudanças de supino que valem desde 2023 e seguem na versão de 2026." Deixa claro que tudo que vem depois respeita isso.`},
+
+/* 4 — PONTOS DE CONTATO */
+{kind:"std", section:"Regras IPF · Contato", num:"",
+ title:`PONTOS DE CONTATO <span class="g">OBRIGATÓRIOS</span>`,
+ lead:`O corpo fica "preso" no banco do começo ao fim.`,
+ html:`<ul class="clean" style="margin-top:14px">
+   <li><strong>Cabeça, ombros e glúteos</strong> em contato contínuo com o banco — tirar qualquer um anula.</li>
+   <li><strong>Pés planos no chão</strong>, tão planos quanto o calçado permitir. Desde 2023 pode reposicionar o pé, sem deslizar pra fora do plano e sem apoiar no banco.</li>
+   <li><strong>Cabelo</strong> não pode esconder a parte de trás da cabeça apoiada.</li>
+   <li>Deslocar a mão de lado na barra durante a execução também <strong>anula</strong>.</li>
+ </ul>`,
+ notes:`Lista os contatos como inegociáveis. "Cabeça, ombro e glúteo grudados no banco o tempo todo. Tirou o glúteo pra empurrar? Queimou. Pé plano no chão — e atenção, desde 2023 você PODE reajustar o pé durante a execução, o que antes era falha; só não pode deslizar pra fora nem subir no banco. Detalhe que pega gente desavisada: cabelo grande não pode esconder a nuca apoiada." Dá um exemplo real de atleta que perdeu tentativa por bobeira.`},
+
+/* 5 — TRES COMANDOS */
+{kind:"std", section:"Regras IPF · Comandos", num:"",
+ title:`OS TRÊS <span class="g">COMANDOS</span>`,
+ lead:`A execução é regida pela voz do árbitro. Antecipou, queimou.`,
+ html:`<div class="cards c3" style="margin-top:16px">
+   <div class="card"><h4>1 · Start</h4><p>Barra travada, braços estendidos, atleta imóvel. <strong>Autoriza a descida.</strong></p></div>
+   <div class="card"><h4>2 · Press</h4><p>Barra totalmente imóvel no peito. <strong>Autoriza a subida.</strong></p></div>
+   <div class="card"><h4>3 · Rack</h4><p>Barra travada no alto, imóvel. <strong>Encerra a tentativa.</strong></p></div>
+ </div>
+ <div class="callout"><div class="k">Cuidado</div><p>Descer antes do "Start" ou subir antes do "Press" anula — mesmo que a execução física seja perfeita.</p></div>`,
+ notes:`Os três comandos são o metrônomo da prova. "Start: barra travada no alto, você imóvel — aí pode descer. Press: barra parada no peito — aí pode subir. Rack: travou em cima, acabou. O erro clássico do iniciante é a ansiedade: desce antes do start ou explode antes do press. Tecnicamente perfeito, mas três luzes vermelhas." Reforça: treinar com pausa e comando, não só carga.`},
+
+/* 6 — PEGADA REGRA */
+{kind:"std", section:"Regras IPF · Pegada", num:"",
+ title:`PEGADA: O LIMITE DE <span class="g">81 CM</span>`,
+ lead:`A regra que define onde suas mãos podem ficar.`,
+ html:`<ul class="clean" style="margin-top:14px">
+   <li>Espaçamento <strong>máximo de 81 cm</strong>, medido entre os dedos indicadores (as marcas da barra, os "power rings").</li>
+   <li>Em pegada máxima, os dois indicadores ficam <strong>dentro e em contato</strong> com as marcas.</li>
+   <li>Polegar <strong>obrigatoriamente envolvendo</strong> a barra (thumb around).</li>
+   <li>Pegada invertida / "suicídio" é <strong>proibida</strong>.</li>
+ </ul>`,
+ notes:`Regra objetiva. "Oitenta e um centímetros é o teto, medido pelo indicador, que é onde ficam as marcas da barra. Você pode pegar mais fechado à vontade, mas não pode passar disso. Polegar sempre por cima envolvendo — nada de pegada de suicídio, além de ilegal é como você vira manchete por motivo errado." A largura DENTRO desse limite a gente ajusta na Parte 2.`},
+
+/* 7 — COTOVELO ABAIXO DO OMBRO + VIDEO */
+{kind:"video", section:"Regras IPF · Profundidade", num:"",
+ title:`O COTOVELO ABAIXO DO <span class="g">OMBRO</span>`,
+ lead:`A regra de 2023 que acabou com o "meio supino" de ponte extrema.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li>Na descida, a face inferior <strong>de ambos os cotovelos</strong> precisa descer ao nível ou abaixo da face superior do respectivo ombro.</li>
+   <li>Não basta a barra tocar o peito: o <strong>cotovelo precisa quebrar a linha do ombro</strong>.</li>
+   <li>A barra <strong>não pode tocar o cinto</strong> — se descer no cinto, o comando é "Rack" e a tentativa é nula.</li>
+ </ul>
+ <div class="judge"><div class="j ok"><span>Good lift</span>Cotovelo quebra a linha do ombro</div><div class="j no"><span>No lift</span>Ponte curtíssima, cotovelo alto</div></div>`,
+ videos:[dr("1UByEmEy5gSbr_rFqy7YqQ9uI-9jSzUF4","Demonstração · profundidade legal")],
+ notes:`Essa é a regra mais importante pra quem faz ponte alta. "Antes, bastava a barra encostar no peito. Hoje não: os dois cotovelos têm que descer até o nível do topo do ombro, ou abaixo. Isso existe pra matar aquele 'meio supino' de quem arqueia tanto que a barra anda dez centímetros. E cuidado: a barra não pode descer no cinto — se descer no abdômen baixo/cinto, o juiz manda rackear e queima." Mostra o vídeo: aponta a linha do ombro e onde o cotovelo precisa chegar.`},
+
+/* 8 — NULIDADES */
+{kind:"std", section:"Regras IPF · Nulidades", num:"",
+ title:`O QUE <span class="g">QUEIMA</span> NO TOQUE E NA SUBIDA`,
+ lead:`Guarde esta lista: ela define os limites do tipo de pausa lá na frente.`,
+ html:`<div class="cards c4" style="margin-top:14px">
+   <div class="card"><h4>Sinking</h4><p>Afundar a barra no peito <strong>depois</strong> de já estar imóvel.</p></div>
+   <div class="card"><h4>Heaving</h4><p>Empurrar / quicar a barra no peito pra ganhar impulso.</p></div>
+   <div class="card"><h4>Movimento descendente</h4><p>Qualquer descida da barra <strong>durante a subida</strong>.</p></div>
+   <div class="card"><h4>Extensão desigual</h4><p>Braços travando de forma <strong>marcadamente</strong> diferente.</p></div>
+ </div>
+ <div class="callout"><div class="k">Regra de ouro</div><p>Afundar só pode acontecer na descida controlada — nunca depois que a barra parou.</p></div>`,
+ notes:`Aqui você planta uma semente pra Parte 2. "Decora essas causas de queima: afundar depois de parar, quicar a barra, deixar a barra recuar no meio da subida, e travar um braço bem antes do outro. Por que isso importa agora? Porque define o que é um afundamento legal: ele só vale durante a descida; depois que a barra para, qualquer afundada é luz vermelha." Isso conecta direto com soft touch x sinking touch.`},
+
+/* 9 — DIVIDER PARTE 2 */
+{kind:"divider", section:"Parte 2", part:"Parte 2",
+ title:`O SETUP <span class="g">REPRODUTÍVEL</span>`,
+ lead:`Força que você não consegue repetir não é força — é sorte. Vamos montar o supino igual, toda vez.`,
+ notes:`Transição pro coração técnico. "Regra a gente já tem. Agora vem a construção. A meta do setup é uma só: montar o mesmo supino toda vez. Porque o que você repete, você melhora; o que muda a cada série, você nunca controla." Anuncia a sequência: pegada, bulldog, pilastra, escápula, ponte, leg drive, toque.`},
+
+/* 10 — LARGURA DA PEGADA */
+{kind:"std", section:"Setup · Largura da pegada", num:"",
+ title:`LARGURA: PEITO <span class="g">×</span> TRÍCEPS`,
+ lead:`Dentro dos 81 cm, onde você pega muda quem trabalha.`,
+ html:`<div class="cards c3" style="margin-top:14px">
+   <div class="card"><h4>Fechada</h4><p>Antebraço fica vertical mais cedo, <strong>amplitude maior</strong>. Mais tríceps medial. Sticking lá pela metade.</p></div>
+   <div class="card"><h4>Média</h4><p>Onde a <strong>maioria</strong> dos competidores opera. Equilíbrio entre amplitude e torque.</p></div>
+   <div class="card"><h4>Larga (limite)</h4><p>Encurta o trajeto, favorece o <strong>peitoral</strong>. Mais carga, mais estresse na cápsula do ombro.</p></div>
+ </div>
+ <div class="callout"><div class="k">Como testar (Larsen, 2021)</div><p>Varie de 2 a 5 dedos por bloco, mantendo o resto do setup fixo, e compare velocidade na carga e sintomas de ombro. Não existe largura ótima universal — depende do braço, do ponto fraco e da saúde do ombro.</p></div>`,
+ notes:`Conteúdo do slide de pegada variada, com evidência. "Dentro do limite legal, abrir ou fechar a mão muda a ênfase. Mais aberto, mais peito e geralmente um pouco mais de carga, ao custo de ombro. Mais fechado, mais tríceps e mais amplitude. No estudo do Larsen de 2021, a pegada larga moveu um pouco mais de carga, e a fechada acendeu mais o tríceps medial. Mas não saia mudando tudo: varia de dois a cinco dedos por bloco, fixa o resto, e a gente decide junto pela velocidade e pelo conforto do ombro."`},
+
+/* 11 — BULLDOG GRIP + VIDEO */
+{kind:"video", section:"Setup · Bulldog grip", num:"",
+ title:`BULLDOG <span class="g">GRIP</span>`,
+ lead:`A barra empilhada sobre o osso, não pendurada nos dedos.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li>No setup, gire levemente as mãos <strong>para dentro</strong> antes de fechar a pegada.</li>
+   <li>A barra cai na <strong>base da palma</strong> (região tenar), em cima do rádio e da ulna — punho neutro, não hiperestendido.</li>
+   <li>Resultado: menos dor de punho, barra mais difícil de "tombar", cotovelo mais fácil de manter sob a carga.</li>
+ </ul>
+ <div class="callout"><div class="k">Honestidade técnica</div><p>Não há EMG validando a bulldog. O racional é de empilhamento, não de estudo. Vendo como técnica de pilastra — e o indicador ainda define os 81 cm, independente da rotação.</p></div>`,
+ videos:[dr("1CrXIQIZvMdRjsRuJ5awhSXfuDzyPZaZ7","Demonstração · bulldog grip")],
+ notes:`Mostra a mão. "A pegada padrão deixa a barra alta nos dedos com o punho jogado pra trás — dói e a barra tomba. A bulldog resolve: você gira a mão um pouco pra dentro e crava a barra na base da palma, em cima do osso do antebraço. O punho fica reto, a força sobe em linha reta. Seja honesto com o aluno: isso não tem estudo de EMG, é argumento de posicionamento — mas funciona pra dor de punho e pra estabilidade." Roda o vídeo e mostra noob grip x normal x bulldog.`},
+
+/* 12 — PILASTRA */
+{kind:"std", section:"Setup · A pilastra", num:"",
+ title:`O ANTEBRAÇO É UMA <span class="g">PILASTRA</span>`,
+ lead:`Uma coluna sustenta carga reta. Inclinada, ela cede.`,
+ html:`<div class="split"><div>
+   <ul class="clean">
+     <li>No ponto mais baixo, o antebraço fica o <strong>mais vertical possível</strong>: punho empilhado sobre o cotovelo, cotovelo logo abaixo da barra.</li>
+     <li>A força sobe reta pelo osso, por compressão — sem desperdício.</li>
+   </ul></div><div>
+   <div class="card" style="border-left-color:var(--red)"><h4 style="color:var(--red)">O erro: torque</h4><p>Cotovelo à frente da barra cria alavanca. A barra "tomba" pra trás, parte da força vira giro em vez de empurrão, e o ombro absorve o que não deveria.</p></div>
+   </div></div>
+ <div class="callout"><div class="k">Como verificar</div><p>Filme de lado. No toque, uma linha vertical da barra tem que cair sobre o punho e o cotovelo. Cotovelo na frente? Ajuste o ponto de toque (geralmente um pouco mais baixo) ou a largura.</p></div>`,
+ notes:`Esse é o cue que mais muda supino. "Imagina uma coluna sustentando um teto. Reta, ela aguenta tudo. Inclinada, ela trabalha torta e cede. Seu antebraço é essa coluna. No fundo do movimento ele tem que estar vertical, com a barra empilhada em cima do punho e do cotovelo. Quando o cotovelo escapa pra frente, na direção dos pés, cria alavanca: a barra tomba, a força vira torque e o ombro paga a conta. Verifica filmando de lado: a barra, o punho e o cotovelo na mesma vertical." Faixa de cotovelo costuma ser 45 a 75 graus do tronco, mas o critério final é a pilastra, não o ângulo.`},
+
+/* 13 — ESCAPULA + VIDEO */
+{kind:"video", section:"Setup · Escápula", num:"",
+ title:`DEPRESSÃO + RETRAÇÃO: A <span class="g">PLATAFORMA</span>`,
+ lead:`Sem base fixa, parte da sua força vaza no banco.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li><strong>Retração:</strong> juntar as escápulas em direção à coluna. <strong>Depressão:</strong> puxá-las pra baixo, em direção ao quadril.</li>
+   <li>Isso centraliza a cabeça do úmero (menos estresse no ombro) e cria o <strong>ponto de apoio fixo</strong> pra empurrar.</li>
+   <li>Cue: pense em <strong>"torcer a barra"</strong> girando o cotovelo pra dentro enquanto deprime as escápulas. Fácil de sentir fazendo flexão.</li>
+ </ul>
+ <div class="callout"><div class="k">Erro comum</div><p>Montar tudo e perder a depressão na hora de tirar a barra do gancho. Crave a escápula <strong>antes</strong> do unrack e saia com ajuda do spotter.</p></div>`,
+ videos:[dr("1Qj_Lw0b7UQPTPyQ-jk8CoEZDK9j4KoaR","Demonstração · escápula 1"),dr("13PlbhfzfWdG0v2y-IF_0Ry6DCUG0HG5f","Demonstração · escápula 2")],
+ notes:`Aqui mora a estabilidade. "Pra empurrar forte você precisa de chão pra empurrar. No supino, esse chão é a escápula cravada: retrai, junta as omoplatas, e deprime, puxa pra baixo na direção do quadril. Isso faz duas coisas: encaixa a cabeça do úmero, protegendo o ombro, e cria a plataforma fixa. Sem isso, parte da força some no movimento da própria escápula. Um cue que funciona: tenta torcer a barra girando o cotovelo pra dentro enquanto crava a escápula." Mostra os dois vídeos e avisa do erro de perder o encaixe no unrack.`},
+
+/* 14 — PONTE */
+{kind:"std", section:"Setup · A ponte", num:"",
+ title:`A PONTE <span class="g">(ARCH)</span>`,
+ lead:`Encurta a amplitude e melhora a alavanca — mas não é mágica.`,
+ html:`<div class="cards c3" style="margin-top:14px">
+   <div class="card"><h4>Reduz amplitude</h4><p>O peito sobe ao encontro da barra: <strong>menos trajeto</strong> por repetição.</p></div>
+   <div class="card"><h4>Muda o ângulo</h4><p>Vira um leve declinado, favorecendo o <strong>peitoral inferior</strong> e a alavanca.</p></div>
+   <div class="card"><h4>Cria base rígida</h4><p>Torácica estendida e travada = <strong>plataforma estável</strong> pra empurrar.</p></div>
+ </div>
+ <div class="callout"><div class="k">Nuance honesta + alerta</div><p>Em powerlifters, a diferença de 1RM entre plano e arqueado é trivial (efeito ~0,01): o ganho é <strong>individual</strong>. E ponte alta demais com amplitude curtíssima esbarra na regra do cotovelo abaixo do ombro.</p></div>`,
+ notes:`Desmistifica a ponte. "A ponte faz três coisas: encurta o caminho da barra, transforma a trajetória num leve declinado que favorece o peito de baixo, e cria uma base rígida. Mas seja honesto: não é garantia de mais quilos. Tem dado em powerlifter mostrando diferença praticamente zero entre plano e arqueado — o ganho depende de QUANTO ela encurta a SUA amplitude. E o alerta: ponte exagerada com amplitude minúscula esbarra naquela regra do cotovelo. Ponte serve, mas o cotovelo ainda tem que quebrar a linha do ombro."`},
+
+/* 15 — MOBILIDADE + VIDEO */
+{kind:"video", section:"Setup · Mobilidade", num:"",
+ title:`MOBILIDADE PRA <span class="g">SUSTENTAR</span> A PONTE`,
+ lead:`A ponte que você consegue manter vale mais que a que você força.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li><strong>Extensão torácica</strong> — gato-camelo e mobilizações pra abrir a parte de cima das costas.</li>
+   <li><strong>Alongamento de quadríceps e flexor de quadril</strong> — perna travada limita a ponte e o leg drive.</li>
+   <li>Trabalhe antes de treinar: ponte sustentável vem de mobilidade, não de teimosia.</li>
+ </ul>`,
+ videos:[dr("1a77w2qbI7RIZXAR7tU9mPyV_LadxJt4d","Mobilidade · torácica"),dr("1HoteBbWNG_LwDpMXvqllKT3YoW9tY3ck","Mobilidade · quadríceps")],
+ notes:`Conecta ponte com mobilidade. "Não adianta querer ponte de campeão com costas travadas. Duas frentes: extensão da torácica, com gato-camelo e mobilizações, pra abrir a parte de cima; e soltar quadríceps e flexor de quadril, porque perna curta limita tanto a ponte quanto o leg drive. A melhor ponte não é a mais alta, é a que você consegue manter cravada do start ao rack." Roda os dois vídeos como exemplo de drill.`},
+
+/* 16 — LEG DRIVE */
+{kind:"std", section:"Setup · Leg drive", num:"",
+ title:`LEG DRIVE: MITO <span class="g">×</span> MECANISMO`,
+ lead:`Perna não "ativa mais o peito". Ela faz outra coisa — e é importante.`,
+ html:`<div class="split"><div>
+   <div class="card" style="border-left-color:var(--red)"><h4 style="color:var(--red)">O mito</h4><p>"Usar a perna ativa mais o peitoral." Gardner et al. (2019): EMG <strong>sem diferença</strong> significativa na ativação dos motores.</p></div></div><div>
+   <div class="card"><h4>O mecanismo real</h4><p>Sustenta a ponte, <strong>aumenta a rigidez</strong> do sistema e estabiliza a sticking region. Força horizontal, não vertical.</p></div></div></div>
+ <div class="callout"><div class="k">Como aplicar</div><p>"Empurre o chão pra longe" deslizando em direção aos ombros — nunca levantando o quadril. O glúteo fica cravado (tirou, queimou). Carrega na descida, máximo na saída do peito.</p></div>`,
+ notes:`Corrige um mito que todo mundo repete. "Você ouve por aí que leg drive ativa mais o peito. Não ativa — o estudo do Gardner mediu EMG e não achou diferença nos músculos do empurrão. Então por que usar? Porque o benefício é mecânico, não de ativação: a perna sustenta a ponte, deixa o sistema rígido e te segura na parte travada do movimento. A intenção é horizontal: empurrar o chão pra longe e deslizar na direção dos ombros, com o glúteo cravado. Levantou o quadril? Queimou."`},
+
+/* 17 — TIPOS DE TOQUE */
+{kind:"std", section:"Setup · Tipo de toque", num:"",
+ title:`SOFT TOUCH <span class="g">×</span> SINKING TOUCH`,
+ lead:`A barra tem que parar no peito. O que muda é como ela chega lá.`,
+ html:`<div class="cards c2" style="margin-top:14px">
+   <div class="card"><h4>Soft touch · o padrão seguro</h4><p>Toca de leve, mantém ponte e tensão, segura e empurra. <strong>Posição estável, menor risco</strong> de luz vermelha. Aproveita menos rebote.</p></div>
+   <div class="card"><h4>Sinking touch · avançado</h4><p>Deixa a barra penetrar um pouco <strong>na descida</strong>, captura energia elástica, então estabiliza. Mais carga potencial, <strong>mais risco e timing</strong>.</p></div>
+ </div>
+ <div class="callout"><div class="k">Critério</div><p>Em dúvida, soft touch. Só migre pro sinking se sua sticking é na saída do peito, você domina a tensão e consegue — em vídeo — parar a barra sem nenhum movimento descendente residual.</p></div>`,
+ notes:`Fecha a Parte 2 com a decisão do toque. "Lembra da regra de queima: afundar depois de parar é nulo. Então o afundamento legal acontece SÓ na descida. O soft touch toca de leve, segura a tensão e empurra — é o seguro, o que eu recomendo pra maioria. O sinking deixa a barra afundar um pouco na descida pra pegar rebote elástico, mas exige controle absurdo e arrisca a luz vermelha. Em dúvida? Soft touch. Treina pausa de um a dois segundos pra ter folga na prova."`},
+
+/* 18 — MUSCULOS */
+{kind:"std", section:"Setup · Recrutamento", num:"",
+ title:`QUEM REALMENTE <span class="g">TRABALHA</span>`,
+ lead:`Três motores primários — e o setup desloca a ênfase entre eles.`,
+ html:`<div class="cards c3" style="margin-top:14px">
+   <div class="card"><h4>Peitoral maior</h4><p>Em geral o de maior ativação, sobretudo na <strong>saída do peito</strong>.</p></div>
+   <div class="card"><h4>Deltoide anterior</h4><p>Contribuição <strong>crescente</strong> conforme a barra sobe.</p></div>
+   <div class="card"><h4>Tríceps braquial</h4><p>Protagonista no <strong>terço final</strong> e no lockout.</p></div>
+ </div>
+ <ul class="clean" style="margin-top:16px">
+   <li>Pegada larga &rarr; mais peito · pegada fechada &rarr; mais tríceps · ponte/declinado &rarr; peito inferior.</li>
+   <li>Estabilizadores: dorsal, trapézio, core e pernas — sustentam a posição, sem gerar o empurrão.</li>
+ </ul>`,
+ notes:`Mapa muscular rápido, ligando com o setup. "Três motores: peitoral, que domina na saída do peito; deltoide anterior, que entra forte conforme sobe; e tríceps, o rei do travamento. E olha como tudo se conecta: pegada larga puxa pro peito, fechada pro tríceps, ponte pro peito de baixo. Dorsal, trapézio, core e perna não empurram a barra, mas seguram a casa." Isso prepara o aluno pra entender por que cada variação ataca um motor específico.`},
+
+/* 19 — ROTEIRO DE EXECUCAO */
+{kind:"std", section:"Setup · Checklist", num:"",
+ title:`O <span class="g">PASSO A PASSO</span> PRA REPETIR`,
+ lead:`Decore a sequência. É ela que vira força consistente.`,
+ html:`<div class="cards c2" style="margin-top:12px;gap:10px">
+   <div class="card" style="padding:12px 16px"><p><strong>1.</strong> Olhos atrás da barra, pegada escolhida, polegar envolvendo.</p></div>
+   <div class="card" style="padding:12px 16px"><p><strong>2.</strong> Crava escápula: retrai e deprime.</p></div>
+   <div class="card" style="padding:12px 16px"><p><strong>3.</strong> Monta a ponte com os pés, ombros cravados, torácica estendida.</p></div>
+   <div class="card" style="padding:12px 16px"><p><strong>4.</strong> Reposiciona os pés sustentando a ponte, glúteo no banco.</p></div>
+   <div class="card" style="padding:12px 16px"><p><strong>5.</strong> Unrack sem perder o encaixe. Espera o "Start".</p></div>
+   <div class="card" style="padding:12px 16px"><p><strong>6.</strong> Desce controlado, pilastra vertical, cotovelo quebra a linha do ombro, carrega o leg drive.</p></div>
+   <div class="card" style="padding:12px 16px"><p><strong>7.</strong> Toque (soft ou sinking), barra imóvel. Espera o "Press".</p></div>
+   <div class="card" style="padding:12px 16px"><p><strong>8.</strong> Empurra com extensão simétrica, sem recuo. Trava e espera o "Rack".</p></div>
+ </div>`,
+ notes:`Esse slide é pra fixar. Passa rápido, como um ritual: "olhos atrás da barra; crava a escápula; monta a ponte com os pés; reposiciona o pé; tira a barra sem perder o encaixe; espera o start; desce na pilastra com o cotovelo quebrando a linha do ombro; toca e para; espera o press; empurra reto, sem recuo; trava; espera o rack." Manda o aluno repetir isso em casa, sem carga, até virar automático.`},
+
+/* 20 — DIVIDER PARTE 3 */
+{kind:"divider", section:"Parte 3", part:"Parte 3",
+ title:`VARIAÇÕES COM <span class="g">PROPÓSITO</span>`,
+ lead:`Variação não é enfeite de treino. Cada uma corrige um ponto fraco específico. Clique nos vídeos pra ver.`,
+ notes:`Abre a parte mais prática. "Agora os exercícios. E presta atenção: variação não é pra 'variar' por tédio. Cada uma dessas existe pra consertar um buraco específico — excêntrica, saída do peito, travamento, estabilidade. Eu vou te dar a utilidade de cada uma, e nos slides tem vídeo: é só clicar que roda aqui mesmo." Convida o aluno a identificar o próprio ponto fraco enquanto assiste.`},
+
+/* 21 — SPOTO PRESS */
+{kind:"video", section:"Variações · Spoto press", num:"",
+ title:`SPOTO <span class="g">PRESS</span>`,
+ lead:`Pausa no ar, um dedo acima do peito. Sem ajuda do tronco.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li>Corrige a <strong>excêntrica</strong>: obriga a manter tensão na descida e pausar <strong>sem apoiar no tronco</strong>.</li>
+   <li>Cria mais controle perto do <strong>ponto de maior tensão</strong> do peitoral — o tecido não participa do impulso.</li>
+   <li>Para quem <strong>falha quando perde o controle da velocidade</strong> na descida.</li>
+ </ul>
+ <div class="callout"><div class="k">Por que funciona</div><p>Frear a carga contra a gravidade na posição mais difícil desenvolve força bruta ali — e ensina o dead stop limpo no peito.</p></div>`,
+ videos:[yt("Ggw9I2_eWGc","YouTube · execução"),dr("1eqczyCxRhE3vKOouLddlvs3uZ1_Uu_X9","Demonstração interna")],
+ notes:`Primeira variação. "Spoto press: você desce e para a barra um dedo ACIMA do peito, no ar, sem encostar. Por que isso é genial? Porque mata qualquer ajuda do tecido e do tronco — você sustenta a carga exatamente no ponto mais difícil, o de maior tensão do peitoral. É a variação número um pra quem perde o controle da velocidade na descida e desmonta lá embaixo. Bônus: ensina a parar a barra limpa, o que ajuda no dead stop do supino normal." Clica no vídeo do YouTube e na demonstração.`},
+
+/* 22 — TEMPO BENCH */
+{kind:"video", section:"Variações · Tempo bench", num:"",
+ title:`TEMPO BENCH <span class="g">PRESS</span>`,
+ lead:`Excêntrica lenta e controlada, pausa no corpo.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li>Desce <strong>bem mais devagar</strong> que o normal, obrigando atenção a cada parte: ângulo do cotovelo, trajetória, ponto de toque.</li>
+   <li>Pausa <strong>com apoio no tronco</strong>, permitindo movimento completo e <strong>leg drive</strong> — mais específico ao supino de competição.</li>
+   <li>Ataca a <strong>inconsistência</strong>: ideal pra quem varia técnica entre reps e séries.</li>
+ </ul>`,
+ videos:[yt("JUXBI-DcATA","YouTube · execução")],
+ notes:`Segunda variação, par do Spoto. "Tempo bench: aqui a barra desce no peito normalmente, mas LENTO, controlado, e você pausa no corpo. A descida lenta te força a pensar em cada detalhe — ângulo do cotovelo, bar path, ponto de toque. Como a pausa é no peito, você ainda usa leg drive, o que deixa o movimento mais parecido com o supino de prova. É a variação da consistência: perfeita pra quem faz cada rep diferente." No próximo slide eu comparo Spoto e Tempo, que é a dúvida que sempre aparece.`},
+
+/* 23 — SPOTO x TEMPO */
+{kind:"std", section:"Variações · Spoto × Tempo", num:"",
+ title:`SPOTO <span class="g">×</span> TEMPO: QUAL ESCOLHER`,
+ lead:`Parecem irmãos, mas resolvem coisas diferentes.`,
+ html:`<div class="cards c2" style="margin-top:14px">
+   <div class="card"><h4>Spoto press</h4><p>Pausa <strong>no ar</strong>, sem tronco. Biomecanicamente mais difícil. Constrói <strong>força no ponto de maior tensão</strong> pela frenagem contra a gravidade. Use quando o problema é controle/força lá embaixo.</p></div>
+   <div class="card"><h4>Tempo bench</h4><p>Pausa <strong>no corpo</strong>, com leg drive. Mais <strong>específico</strong> ao supino normal. Use quando o problema é consistência e técnica que varia.</p></div>
+ </div>
+ <div class="callout"><div class="k">Resumo</div><p>Falta de força/controle na descida &rarr; Spoto. Falta de consistência técnica &rarr; Tempo. Dá pra rodar os dois no mesmo bloco, em sessões diferentes.</p></div>`,
+ notes:`Resolve a comparação que todo aluno pergunta. "'Mas qual é melhor, Spoto ou Tempo?' Depende do problema. Spoto é mais difícil biomecanicamente porque você sustenta no ar, sem nenhuma ajuda — ele constrói força bruta no ponto de maior tensão. Tempo é mais específico ao supino de prova porque você pausa no corpo e usa perna. Regra prática: se você perde força e controle na descida, Spoto. Se sua técnica muda toda rep, Tempo. E dá pra usar os dois no mesmo bloco, em dias diferentes."`},
+
+/* 24 — PIN x DEAD */
+{kind:"video", section:"Variações · Pin × Dead bench", num:"",
+ title:`PIN PRESS <span class="g">×</span> DEAD BENCH`,
+ lead:`Quando a excêntrica é boa, mas falta força pra sair do peito.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li><strong>Pin press:</strong> barra parte de pinos um pouco acima do peito. Remove a excêntrica, ensina a <strong>gerar força do zero</strong> mantendo a tensão embaixo. <strong>1ª alternativa</strong>.</li>
+   <li><strong>Dead bench:</strong> dead stop total nos pinos, sem nenhuma tensão pré-carregada — o mais cru pra <strong>força explosiva na saída</strong>. <strong>2ª alternativa</strong>, mais difícil.</li>
+ </ul>
+ <div class="callout"><div class="k">Critério</div><p>Boa excêntrica + dificuldade na concêntrica: comece pelo pin press; suba pro dead bench conforme o grau de dificuldade em recrutar força da posição parada.</p></div>`,
+ videos:[yt("A9cURRmXcmw","YouTube · pin press"),yt("9ntAEA4fsxc","YouTube · dead bench")],
+ notes:`Par pra quem trava na saída. "Tem atleta que desce lindo, mas morre na saída do peito. Pra esse, duas ferramentas. Pin press: a barra começa parada em pinos um pouco acima do peito; tira a fase de descida e te obriga a gerar força do zero, mantendo a tensão lá embaixo. É a primeira escolha. Dead bench é o primo mais brabo: dead stop total, zero tensão acumulada, força 100% explosiva da posição morta. Começa pelo pin press; sobe pro dead bench quando precisar de mais." Roda os dois vídeos lado a lado.`},
+
+/* 25 — LARSEN PRESS */
+{kind:"video", section:"Variações · Larsen press", num:"",
+ title:`LARSEN <span class="g">PRESS</span>`,
+ lead:`Sem leg drive, sem desculpa: só peito, ombro e tríceps.`,
+ col:"v",
+ html:`<ul class="clean">
+   <li>Pernas <strong>estendidas à frente</strong>, fora do chão — elimina o leg drive por completo.</li>
+   <li>Cada quilo passa só pela <strong>força do tronco superior</strong>. Mais instabilidade, mais core e oblíquo.</li>
+   <li>Sem ponte/perna, a amplitude aumenta: <strong>expõe o ponto fraco</strong> sem precisar pôr mais carga.</li>
+ </ul>
+ <div class="callout"><div class="k">Na prática</div><p>Costuma render ~8% menos que o supino normal (é a perda do leg drive, não menos esforço). Quem roda um bloco de Larsen quase sempre volta com o supino plano mais forte.</p></div>`,
+ videos:[yt("EV5hDMDiIIY","YouTube · execução")],
+ notes:`Última variação. "Larsen press: você estende as pernas pra frente, tira o pé do chão e elimina o leg drive de vez. Resultado? Cada quilo passa exclusivamente pelo peito, ombro e tríceps, com o core segurando a instabilidade. Sem perna e sem ponte a amplitude cresce, então ele é um detector brutal de ponto fraco — sem você precisar botar mais peso na barra. Normal render uns 8% menos, e isso é a perda do leg drive, não menos esforço. Quem roda um bloco disso volta com o supino plano voando." Clica e mostra.`},
+
+/* 26 — MATRIZ DE ESCOLHA */
+{kind:"std", section:"Variações · Como escolher", num:"",
+ title:`A VARIAÇÃO CERTA PRO SEU <span class="g">PONTO FRACO</span>`,
+ lead:`Diagnostique primeiro, escolha depois. Variação é remédio, não suplemento.`,
+ html:`<div class="cards c2" style="margin-top:12px;gap:12px">
+   <div class="card"><h4>Perde controle na descida</h4><p>&rarr; <strong>Spoto press</strong> (força no ponto de maior tensão).</p></div>
+   <div class="card"><h4>Técnica varia toda rep</h4><p>&rarr; <strong>Tempo bench</strong> (consistência e bar path).</p></div>
+   <div class="card"><h4>Trava na saída do peito</h4><p>&rarr; <strong>Pin press</strong> &rarr; depois <strong>Dead bench</strong>.</p></div>
+   <div class="card"><h4>Quer expor o elo fraco / estabilidade</h4><p>&rarr; <strong>Larsen press</strong>.</p></div>
+ </div>
+ <div class="callout"><div class="k">Lembrete</div><p>Variação entra como acessório, em volume, sem roubar a recuperação do supino principal — exatamente como na lógica de principal × variação × volume.</p></div>`,
+ notes:`Síntese da Parte 3 — esse é o slide que o aluno vai fotografar. "Para tudo e diagnostica antes de escolher. Perdeu o controle na descida? Spoto. Técnica muda toda rep? Tempo. Trava na saída do peito? Pin press, e depois dead bench se precisar. Quer achar e atacar o elo mais fraco? Larsen. E o mais importante: variação é acessório, entra em volume, com intensidade baixa, sem brigar pela recuperação do seu supino principal." Conecta com a lógica de periodização da PsychoTeam.`},
+
+/* 27 — CTA */
+{kind:"cta", section:"PsychoTeam",
+ html:`<div class="content cta">
+   <div class="eyebrow">P S Y C H O T E A M</div>
+   <h2 class="title" style="margin-top:18px">ISSO É UM PONTO<br>DE <span class="g">PARTIDA</span></h2>
+   <p class="disc">Essas diretrizes servem pra maioria, mas não substituem a avaliação individual. Histórico, ponto fraco, alavanca e recuperação mudam tudo. Na PsychoTeam todo aluno começa com avaliação completa — treino e ajuste do começo ao fim.</p>
+   <a class="btn" href="https://wa.me/message/546BBW7RMFXRB1" target="_blank" rel="noopener">Fale comigo no WhatsApp →</a>
+   <div class="wa">wa.me/message/546BBW7RMFXRB1</div>
+ </div>`,
+ notes:`Fechamento e chamada. "Tudo que a gente viu hoje é um ponto de partida sólido — serve pra maioria. Mas o seu supino tem a SUA alavanca, o SEU ponto fraco e a SUA recuperação. É por isso que na PsychoTeam todo aluno começa com avaliação individual: pra escolher a pegada, o toque e a variação certos pro seu corpo. Se você quer parar de adivinhar e começar a progredir de verdade, chama no WhatsApp." Encerra com energia, sem pressa.`}
+];
+
+/* ============== RENDER ============== */
+const deck = document.getElementById('deck');
+const PART_LABELS = {};
+function videoCardHTML(v){
+  if(v.type==="yt"){
+    const poster = "https://i.ytimg.com/vi/"+v.id+"/hqdefault.jpg";
+    return `<div class="video" data-type="yt" data-id="${v.id}">
+      <div class="poster" style="background-image:url('${poster}')"></div>
+      <div class="ovl"><div class="play"><svg width="22" height="26" viewBox="0 0 22 26"><path d="M0 0l22 13L0 26z" fill="#15110a"/></svg></div></div>
+      <div class="vlabel">▶ ${v.label}</div></div>`;
+  } else {
+    return `<div class="video" data-type="drive" data-id="${v.id}">
+      <div class="drivebg"></div>
+      <div class="ovl"><div class="play"><svg width="22" height="26" viewBox="0 0 22 26"><path d="M0 0l22 13L0 26z" fill="#15110a"/></svg><div style="font-size:11px;letter-spacing:.1em;color:#cdbf9a;margin-top:4px">CLIQUE PARA REPRODUZIR</div></div></div>
+      <div class="vlabel">▶ ${v.label}</div></div>`;
+  }
+}
+function buildSlide(s,i,total){
+  const el=document.createElement('section');
+  el.className='slide'+(s.kind==='divider'?' divider':'')+(s.kind==='cta'?' cta':'');
+  el.dataset.idx=i;
+  let inner='';
+  if(s.kind==='cover'||s.kind==='cta'){
+    inner = s.html;
+  } else if(s.kind==='divider'){
+    inner = `<div class="head"><span>${SEC}</span><span class="r">${(i+1).toString().padStart(2,'0')} / ${total}</span></div><div class="rule"></div>
+      <div class="content"><div class="part">${s.part}</div><h2 class="title">${s.title}</h2><div class="lead">${s.lead}</div></div>
+      <div class="foot"><span>PsychoTeam · ${s.section}</span><span>Material exclusivo. Reprodução proibida.</span></div>`;
+  } else {
+    let media='';
+    if(s.videos){
+      const cls = s.videos.length>1?'vwrap two':'vwrap';
+      media = `<div class="${cls}">`+s.videos.map(videoCardHTML).join('')+`</div>`;
+    }
+    let main='';
+    if(s.kind==='video'){
+      main = `<div class="split ${s.col==='v'?'v':''}"><div>${s.html}</div><div>${media}</div></div>`;
+    } else {
+      main = s.html||'';
+    }
+    inner = `<div class="head"><span>${SEC} · ${s.section}</span><span class="r">${(i+1).toString().padStart(2,'0')} / ${total}</span></div><div class="rule"></div>
+      <div class="content"><div class="titlerow">${s.num?`<span class="numbadge">${s.num}</span>`:''}<div style="flex:1"><h2 class="title">${s.title}</h2>${s.lead?`<div class="lead">${s.lead}</div>`:''}</div></div>
+      ${main}</div>
+      <div class="foot"><span>PsychoTeam · Engenharia do Supino</span><span>${s.section}</span></div>`;
+  }
+  el.innerHTML=inner;
+  return el;
+}
+const total=SLIDES.length;
+SLIDES.forEach((s,i)=>deck.appendChild(buildSlide(s,i,total)));
+const slides=[...document.querySelectorAll('.slide')];
+
+/* video click-to-play (delegated) */
+deck.addEventListener('click',e=>{
+  const v=e.target.closest('.video'); if(!v||v.dataset.loaded)return;
+  const id=v.dataset.id, type=v.dataset.type;
+  const src = type==='yt'
+    ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`
+    : `https://drive.google.com/file/d/${id}/preview`;
+  v.dataset.loaded='1';
+  v.innerHTML=`<iframe src="${src}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+});
+
+/* nav */
+let cur=0;
+const bar=document.getElementById('bar'), count=document.getElementById('count');
+function show(n){
+  cur=Math.max(0,Math.min(total-1,n));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  bar.style.width=((cur+1)/total*100)+'%';
+  count.textContent=(cur+1)+' / '+total;
+  updateNotes();
+}
+function next(){show(cur+1)} function prev(){show(cur-1)}
+document.getElementById('next').onclick=next;
+document.getElementById('prev').onclick=prev;
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){prev()}
+  else if(e.key==='Home'){show(0)} else if(e.key==='End'){show(total-1)}
+  else if(e.key.toLowerCase()==='f'){toggleFs()}
+  else if(e.key.toLowerCase()==='n'){toggleNotes()}
+});
+/* fullscreen */
+function toggleFs(){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}else{document.exitFullscreen&&document.exitFullscreen()} }
+document.getElementById('fs').onclick=toggleFs;
+/* notes */
+const notesPanel=document.getElementById('notes');
+function toggleNotes(){notesPanel.classList.toggle('open');scale()}
+document.getElementById('notesBtn').onclick=toggleNotes;
+function updateNotes(){
+  const s=SLIDES[cur];
+  document.getElementById('nTitle').textContent='Notas do apresentador';
+  document.getElementById('nSub').textContent=(cur+1)+' / '+total+'  ·  '+s.section;
+  document.getElementById('nBody').innerHTML='<p>'+(s.notes||'—')+'</p>';
+}
+/* scale deck to viewport */
+function scale(){
+  const pad=40;
+  const aw=window.innerWidth-(notesPanel.classList.contains('open')?380:0)-pad;
+  const ah=window.innerHeight-pad;
+  const k=Math.min(aw/1280, ah/720);
+  deck.style.transform='scale('+k+')';
+  document.getElementById('stage').style.paddingRight=notesPanel.classList.contains('open')?'380px':'0';
+}
+window.addEventListener('resize',scale);
+/* swipe (touch) */
+let tx=0;
+deck.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+deck.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>50){dx<0?next():prev()}});
+show(0); scale();
+</script>
+</body>
+</html>
