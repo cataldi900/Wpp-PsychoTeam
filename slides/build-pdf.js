@@ -48,7 +48,7 @@ function slidePage(s, i, total) {
   } else if (s.kind === 'divider') {
     cls += ' divider';
     inner = `<div class="head"><span>${SEC}</span><span class="r">${counter}</span></div><div class="rule"></div>
-      <div class="body-wrap"><div class="part">${s.part}</div><h2 class="title big2">${s.title}</h2><div class="lead">${s.lead}</div></div>
+      <div class="body-wrap"><div class="part">${s.part}</div><h2 class="title big2">${s.title}</h2>${s.lead ? `<div class="lead">${s.lead}</div>` : ''}</div>
       <div class="foot"><span>PsychoTeam · ${s.section}</span><span>Material exclusivo. Reprodução proibida.</span></div>`;
   } else {
     let media = '';

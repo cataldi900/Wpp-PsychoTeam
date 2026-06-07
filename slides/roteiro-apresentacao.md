@@ -84,7 +84,7 @@ o punho e o cotovelo. Quando o cotovelo escapa pra frente, vira alavanca: a barr
 torque e o ombro paga a conta. Verifica filmando de lado: barra, punho e cotovelo na mesma vertical. Roda
 o vídeo do descompasso pra mostrar o erro acontecendo ao vivo."
 
-**Slide 13 — Escápula.** *(vídeos: escápula 1 e 2)*
+**Slide 13 — Escápula.** *(4 demonstrações de depressão + retração)*
 "Pra empurrar forte você precisa de chão pra empurrar. No supino esse chão é a escápula cravada: retrai,
 junta as omoplatas, e deprime, puxa pra baixo na direção do quadril. Isso encaixa a cabeça do úmero,
 protegendo o ombro, e cria a plataforma fixa. Sem isso, parte da força some no movimento da escápula. Cue
@@ -98,10 +98,11 @@ trajeto e melhora a alavanca, levanta mais peso de verdade. Por isso a ponte é 
 não enfeite. O único alerta é regulatório: ponte exagerada com amplitude minúscula esbarra na regra do
 cotovelo — então faça a ponte, mas o cotovelo ainda tem que quebrar a linha do ombro."
 
-**Slide 15 — Mobilidade.** *(vídeos: torácica e quadríceps)*
+**Slide 15 — Mobilidade.** *(vídeos YouTube: cat-camel, coluna torácica com rolo, alongamento de quadríceps)*
 "Não adianta querer ponte de campeão com costas travadas. Duas frentes: extensão da torácica, com
-gato-camelo, pra abrir a parte de cima; e soltar quadríceps e flexor de quadril, porque perna curta limita
-a ponte e o leg drive. A melhor ponte não é a mais alta, é a que você mantém cravada do start ao rack."
+gato-camelo e mobilização com rolo, pra abrir a parte de cima; e soltar quadríceps e flexor de quadril,
+porque perna curta limita a ponte e o leg drive. A melhor ponte não é a mais alta, é a que você mantém
+cravada do start ao rack. Toca os três drills do YouTube pra mostrar cada um."
 
 **Slide 16 — Leg drive: mito x mecanismo.**
 "Você ouve por aí que leg drive ativa mais o peito. Não ativa — o estudo do Gardner mediu EMG e não achou
@@ -109,7 +110,7 @@ diferença nos músculos do empurrão. Então por que usar? Porque o benefício 
 ponte, deixa o sistema rígido e te segura na parte travada. A intenção é horizontal: empurrar o chão pra
 longe e deslizar na direção dos ombros, com o glúteo cravado. Levantou o quadril? Queimou."
 
-**Slide 17 — Tipos de toque.**
+**Slide 17 — Tipos de toque.** *(vídeo: passo a passo do supino)*
 "Lembra da regra: afundar depois de parar é nulo. Então o afundamento legal acontece só na descida. O soft
 touch toca de leve, segura a tensão e empurra — é o seguro, o que recomendo pra maioria. O sinking deixa a
 barra afundar um pouco na descida pra pegar rebote, mas exige controle absurdo e arrisca a luz vermelha.

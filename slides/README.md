@@ -16,7 +16,8 @@ Deck de apresentação interativo da aula de supino reto, no padrão visual dos 
 4. Precisa de **internet** durante a apresentação (vídeos do YouTube e do Drive são embutidos).
 
 ## Vídeos usados (27 slides)
-**YouTube (variações):**
+**YouTube (variações + mobilidade):**
+- Slide 15 mobilidade — Cat-camel `dIM1Em209ts` · Coluna torácica com rolo `rlV2c_KaEzY` · Quadríceps `jxWQT8X0w8Y`
 - Slide 21 Spoto press — `Ggw9I2_eWGc`
 - Slide 22 Tempo bench — `JUXBI-DcATA`
 - Slide 24 Pin press — `A9cURRmXcmw` · Dead bench — `9ntAEA4fsxc`
@@ -27,8 +28,8 @@ Deck de apresentação interativo da aula de supino reto, no padrão visual dos 
 - Slide 11 bulldog (demonstração) — `1CrXIQIZvMdRjsRuJ5awhSXfuDzyPZaZ7`
 - Slide 11 bulldog (passo a passo) — `17gln2KDcLYQd22Pzsv7cZLnw6xRSlowB`
 - Slide 12 pilastra (descompasso cotovelo × barra) — `1Ta538bmgU0pPzf9qpfcnMFVEwZHpEdll`
-- Slide 13 escápula — `1Qj_Lw0b7UQPTPyQ-jk8CoEZDK9j4KoaR`, `13PlbhfzfWdG0v2y-IF_0Ry6DCUG0HG5f`
-- Slide 15 mobilidade — `1a77w2qbI7RIZXAR7tU9mPyV_LadxJt4d`, `1HoteBbWNG_LwDpMXvqllKT3YoW9tY3ck`
+- Slide 13 escápula (4 demonstrações) — `1Qj_Lw0b7UQPTPyQ-jk8CoEZDK9j4KoaR`, `13PlbhfzfWdG0v2y-IF_0Ry6DCUG0HG5f`, `1a77w2qbI7RIZXAR7tU9mPyV_LadxJt4d`, `1HoteBbWNG_LwDpMXvqllKT3YoW9tY3ck`
+- Slide 17 soft/sinking (passo a passo do supino) — `1K9iNhVqaYojJuDF7syjd8tuuoMwabopY`
 - Slide 21 Spoto demo — `1eqczyCxRhE3vKOouLddlvs3uZ1_Uu_X9`
 
 ## Compartilhamento dos vídeos
