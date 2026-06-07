@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Indique e Ganhe • PsychoTeam Consultoria</title>
+<style>
+  :root{
+    --bg:#0f1226;
+    --card:#171a35;
+    --card2:#1f2347;
+    --accent:#7c5cff;
+    --accent2:#34d399;
+    --text:#eef0ff;
+    --muted:#a6abd6;
+    --line:#2c3160;
+    --error:#ff6b81;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #2a2467 0%, transparent 55%),
+      radial-gradient(1000px 500px at 110% 10%, #0d4f43 0%, transparent 50%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:24px 16px 64px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  .header{text-align:center;margin-bottom:24px}
+  .badge{
+    display:inline-block;padding:6px 14px;border-radius:999px;
+    background:rgba(124,92,255,.18);color:#c9bcff;font-weight:600;
+    font-size:13px;letter-spacing:.5px;border:1px solid rgba(124,92,255,.35);
+  }
+  h1{font-size:30px;margin:14px 0 8px;line-height:1.2}
+  h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:15px;max-width:520px;margin:0 auto}
+
+  .rules{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0;
+  }
+  @media(max-width:520px){.rules{grid-template-columns:1fr}}
+  .rule{
+    background:linear-gradient(180deg,var(--card2),var(--card));
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px;position:relative;overflow:hidden;
+  }
+  .rule h3{margin:0 0 6px;font-size:15px;color:#fff}
+  .rule p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+  .rule .big{font-size:22px;font-weight:800;color:var(--accent2);display:block;margin-bottom:2px}
+  .rule.you .big{color:#ffd166}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px;margin-top:18px;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+  .section-title{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:0 0 12px;font-weight:700}
+  .field{margin-bottom:14px}
+  label{display:block;font-size:13.5px;margin-bottom:6px;color:#cfd3ff;font-weight:600}
+  input{
+    width:100%;padding:13px 14px;border-radius:12px;
+    border:1px solid var(--line);background:#0e1130;color:var(--text);
+    font-size:15px;outline:none;transition:border .15s,box-shadow .15s;
+  }
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.25)}
+  input.invalid{border-color:var(--error);box-shadow:0 0 0 3px rgba(255,107,129,.18)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.grid2{grid-template-columns:1fr}}
+
+  .indicado{
+    border:1px dashed var(--line);border-radius:14px;padding:16px;margin-bottom:14px;
+    background:rgba(255,255,255,.02);
+  }
+  .indicado .tag{
+    display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#fff;margin-bottom:12px;font-size:14px;
+  }
+  .indicado .tag i{
+    width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));font-style:normal;font-size:13px;
+  }
+
+  .plano-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+  .plano-opt{flex:1;min-width:130px}
+  .plano-opt input{display:none}
+  .plano-opt label{
+    display:block;cursor:pointer;border:1px solid var(--line);border-radius:12px;
+    padding:10px 12px;text-align:center;margin:0;color:var(--muted);font-weight:600;
+    transition:.15s;
+  }
+  .plano-opt input:checked + label{
+    border-color:var(--accent2);background:rgba(52,211,153,.12);color:#fff;
+  }
+
+  .estimativa{
+    margin-top:6px;background:linear-gradient(135deg,rgba(124,92,255,.15),rgba(52,211,153,.12));
+    border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;
+  }
+  .estimativa .label{font-size:13px;color:var(--muted)}
+  .estimativa .valor{font-size:30px;font-weight:800;color:var(--accent2);margin:4px 0}
+  .estimativa small{color:var(--muted);font-size:12.5px}
+
+  button.submit{
+    width:100%;margin-top:18px;padding:16px;border:none;border-radius:14px;
+    background:linear-gradient(135deg,var(--accent),#5b8cff);color:#fff;
+    font-size:16px;font-weight:700;cursor:pointer;transition:.15s;
+  }
+  button.submit:hover{filter:brightness(1.08)}
+  button.submit:disabled{opacity:.6;cursor:not-allowed}
+
+  .msg{margin-top:14px;padding:14px;border-radius:12px;font-size:14px;display:none}
+  .msg.ok{display:block;background:rgba(52,211,153,.15);border:1px solid var(--accent2);color:#bff6e0}
+  .msg.err{display:block;background:rgba(255,107,129,.15);border:1px solid var(--error);color:#ffc9d2}
+
+  .success-box{display:none;text-align:center;padding:30px 10px}
+  .success-box .check{
+    width:72px;height:72px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:36px;
+  }
+  .success-box h2{margin:0 0 8px}
+  .success-box p{color:var(--muted)}
+  .success-box button{
+    margin-top:18px;padding:12px 22px;border-radius:12px;border:1px solid var(--line);
+    background:transparent;color:var(--text);cursor:pointer;font-weight:600;
+  }
+
+  .foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:26px;line-height:1.6}
+  .err-text{color:var(--error);font-size:12px;margin-top:4px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="badge">PROGRAMA DE INDICAÇÃO</span>
+    <h1>Indique amigos e <span>ganhe descontos</span></h1>
+    <p class="sub">Indique até 3 pessoas para a consultoria. A cada indicação que fechar, você ganha desconto — e quem você indicou também!</p>
+  </div>
+
+  <div class="rules">
+    <div class="rule">
+      <h3>🎁 Para quem você indicar</h3>
+      <span class="big">R$ 50 / R$ 100</span>
+      <p>R$ 50 de desconto nos <b>planos mensais</b> e R$ 100 nos <b>planos trimestrais</b> ao fechar.</p>
+    </div>
+    <div class="rule you">
+      <h3>⭐ Para você</h3>
+      <span class="big">R$ 50 por fechamento</span>
+      <p>Você ganha R$ 50 de desconto a <b>cada</b> indicação sua que fechar plano. Indicou 3 e todos fecharam? <b>R$ 150!</b></p>
+    </div>
+  </div>
+
+  <form id="form" novalidate>
+    <div class="card">
+      <p class="section-title">Seus dados (quem está indicando)</p>
+      <div class="grid2">
+        <div class="field">
+          <label for="indicador_nome">Seu nome completo *</label>
+          <input id="indicador_nome" name="indicador_nome" type="text" placeholder="Ex.: Maria Souza" autocomplete="name" />
+          <div class="err-text">Informe seu nome.</div>
+        </div>
+        <div class="field">
+          <label for="indicador_whats">Seu WhatsApp *</label>
+          <input id="indicador_whats" name="indicador_whats" type="tel" inputmode="numeric" placeholder="(11) 99999-9999" />
+          <div class="err-text">Informe um WhatsApp válido.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">Suas indicações (preencha pelo menos 1)</p>
+      <div id="indicados"></div>
+    </div>
+
+    <div class="card">
+      <div class="estimativa">
+        <div class="label">Seu desconto estimado se todas as indicações preenchidas fecharem</div>
+        <div class="valor" id="estimativa-valor">R$ 0</div>
+        <small id="estimativa-detalhe">Preencha as indicações acima para ver sua estimativa.</small>
+      </div>
+      <button type="submit" class="submit" id="btn">Enviar indicações ✨</button>
+      <div class="msg" id="msg"></div>
+    </div>
+  </form>
+
+  <div class="card success-box" id="success">
+    <div class="check">✓</div>
+    <h2>Indicações enviadas! 🎉</h2>
+    <p>Recebemos suas indicações. Nossa equipe vai entrar em contato com elas. Obrigado por confiar na PsychoTeam!</p>
+    <button type="button" id="novo">Fazer nova indicação</button>
+  </div>
+
+  <p class="foot">
+    Ao enviar, você confirma que tem o consentimento das pessoas indicadas para compartilhar o contato delas.<br>
+    PsychoTeam Consultoria • Programa de Indicação
+  </p>
+</div>
+
+<script>
+/* =========================================================================
+   CONFIGURAÇÃO — cole aqui a URL do seu Web App do Google Apps Script.
+   (Veja o passo a passo no README.md / arquivo apps-script/Codigo.gs)
+   ========================================================================= */
+const ENDPOINT = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+
+const NUM_INDICADOS = 3;
+const DESC_INDICADOR_POR_FECHAMENTO = 50; // R$ que quem indica ganha por fechamento
+
+const PLANOS = [
+  { id: "mensal",     label: "Mensal",     descIndicado: 50  },
+  { id: "trimestral", label: "Trimestral", descIndicado: 100 },
+  { id: "indeciso",   label: "Ainda não sei", descIndicado: 0 }
+];
+
+const container = document.getElementById("indicados");
+
+// monta os 3 blocos de indicado dinamicamente
+for (let i = 1; i <= NUM_INDICADOS; i++) {
+  const div = document.createElement("div");
+  div.className = "indicado";
+  div.innerHTML = `
+    <div class="tag"><i>${i}</i> Indicado ${i}${i === 1 ? " *" : " (opcional)"}</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" data-role="nome" data-i="${i}" placeholder="Nome do indicado" />
+      </div>
+      <div class="field">
+        <label>WhatsApp</label>
+        <input type="tel" inputmode="numeric" data-role="whats" data-i="${i}" placeholder="(11) 99999-9999" />
+      </div>
+    </div>
+    <label style="margin-top:4px">Interesse de plano</label>
+    <div class="plano-row">
+      ${PLANOS.map(p => `
+        <div class="plano-opt">
+          <input type="radio" name="plano_${i}" id="plano_${i}_${p.id}" value="${p.id}" ${p.id === "indeciso" ? "checked" : ""}/>
+          <label for="plano_${i}_${p.id}">${p.label}</label>
+        </div>`).join("")}
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+// máscara simples de telefone BR
+function maskPhone(v){
+  v = v.replace(/\D/g,"").slice(0,11);
+  if(v.length <= 2) return v.replace(/(\d{0,2})/,"($1");
+  if(v.length <= 6) return v.replace(/(\d{2})(\d{0,4})/,"($1) $2");
+  if(v.length <= 10) return v.replace(/(\d{2})(\d{4})(\d{0,4})/,"($1) $2-$3");
+  return v.replace(/(\d{2})(\d{5})(\d{0,4})/,"($1) $2-$3");
+}
+document.querySelectorAll('input[type="tel"]').forEach(inp=>{
+  inp.addEventListener("input", e=>{ e.target.value = maskPhone(e.target.value); recalc(); });
+});
+document.querySelectorAll('input[data-role="nome"]').forEach(inp=> inp.addEventListener("input", recalc));
+document.querySelectorAll('input[name^="plano_"]').forEach(inp=> inp.addEventListener("change", recalc));
+
+function indicadoPreenchido(i){
+  const nome = document.querySelector(`input[data-role="nome"][data-i="${i}"]`).value.trim();
+  const whats = document.querySelector(`input[data-role="whats"][data-i="${i}"]`).value.replace(/\D/g,"");
+  return nome.length > 1 && whats.length >= 10;
+}
+
+// estimativa de desconto para QUEM INDICA (R$50 por indicação preenchida que possa fechar)
+function recalc(){
+  let qtd = 0;
+  for(let i=1;i<=NUM_INDICADOS;i++) if(indicadoPreenchido(i)) qtd++;
+  const total = qtd * DESC_INDICADOR_POR_FECHAMENTO;
+  document.getElementById("estimativa-valor").textContent = "R$ " + total;
+  document.getElementById("estimativa-detalhe").textContent =
+    qtd === 0
+      ? "Preencha as indicações acima para ver sua estimativa."
+      : `${qtd} indicação(ões) preenchida(s) × R$ ${DESC_INDICADOR_POR_FECHAMENTO} = seu desconto se todas fecharem. (Elas também ganham desconto!)`;
+}
+recalc();
+
+function showMsg(text, type){
+  const m = document.getElementById("msg");
+  m.textContent = text;
+  m.className = "msg " + type;
+}
+function markInvalid(el, yes){
+  el.classList.toggle("invalid", yes);
+  const err = el.parentElement.querySelector(".err-text");
+  if(err) err.style.display = yes ? "block" : "none";
+}
+
+document.getElementById("form").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  showMsg("", "");
+
+  const nome = document.getElementById("indicador_nome");
+  const whats = document.getElementById("indicador_whats");
+  let ok = true;
+
+  if(nome.value.trim().length < 2){ markInvalid(nome,true); ok=false; } else markInvalid(nome,false);
+  if(whats.value.replace(/\D/g,"").length < 10){ markInvalid(whats,true); ok=false; } else markInvalid(whats,false);
+  if(!indicadoPreenchido(1)){
+    showMsg("Preencha pelo menos a primeira indicação (nome e WhatsApp).", "err");
+    ok = false;
+  }
+  if(!ok){ if(!document.getElementById("msg").textContent) showMsg("Confira os campos destacados.", "err"); return; }
+
+  // monta os dados
+  const indicados = [];
+  for(let i=1;i<=NUM_INDICADOS;i++){
+    const n = document.querySelector(`input[data-role="nome"][data-i="${i}"]`).value.trim();
+    const w = document.querySelector(`input[data-role="whats"][data-i="${i}"]`).value.trim();
+    const plano = (document.querySelector(`input[name="plano_${i}"]:checked`)||{}).value || "";
+    if(n || w.replace(/\D/g,"").length){
+      indicados.push({ posicao:i, nome:n, whatsapp:w, plano_interesse:plano });
+    }
+  }
+
+  const payload = {
+    enviado_em: new Date().toISOString(),
+    indicador_nome: nome.value.trim(),
+    indicador_whatsapp: whats.value.trim(),
+    indicados: indicados
+  };
+
+  const btn = document.getElementById("btn");
+  btn.disabled = true; btn.textContent = "Enviando...";
+
+  try{
+    if(!ENDPOINT || ENDPOINT.startsWith("COLE_AQUI")){
+      throw new Error("O formulário ainda não foi conectado à Planilha Google (configure o ENDPOINT no index.html).");
+    }
+    // Apps Script Web App: usamos text/plain p/ evitar o preflight CORS.
+    await fetch(ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    // com no-cors não conseguimos ler a resposta; assumimos sucesso.
+    document.getElementById("form").style.display = "none";
+    document.getElementById("success").style.display = "block";
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }catch(err){
+    showMsg("Não foi possível enviar agora: " + err.message + " Tente novamente em instantes.", "err");
+  }finally{
+    btn.disabled = false; btn.textContent = "Enviar indicações ✨";
+  }
+});
+
+document.getElementById("novo").addEventListener("click", ()=>{
+  document.getElementById("form").reset();
+  document.querySelectorAll('input[name$="_indeciso"]').forEach(r=>r.checked=true);
+  document.getElementById("success").style.display = "none";
+  document.getElementById("form").style.display = "block";
+  recalc();
+  window.scrollTo({ top:0, behavior:"smooth" });
+});
+</script>
+</body>
+</html>
