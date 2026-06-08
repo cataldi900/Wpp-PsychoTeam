@@ -1,35 +1,44 @@
 @echo off
 chcp 65001 >nul
-title Automacao CapCut - Esforco x Resultado
-cd /d C:\Users\moret\VectCutAPI
+title Editar no CapCut (clique unico)
+setlocal
+
+REM pasta onde este .bat (e o automate_capcut.py) estao
+set "AQUI=%~dp0"
+REM pasta do VectCutAPI (venv + servidor)
+set "VECT=C:\Users\moret\VectCutAPI"
 
 echo ============================================
-echo   AUTOMACAO CAPCUT (clique unico)
+echo    EDICAO AUTOMATICA -^> CAPCUT
 echo ============================================
 echo.
 
-REM 1) ativa a venv
-call venv-capcut\Scripts\activate.bat
+cd /d "%VECT%" || (echo ERRO: nao achei %VECT% & pause & exit /b)
 
-REM 2) instala dependencias (so demora na 1a vez)
-echo [1/4] Verificando dependencias...
+REM ativa a venv
+call "%VECT%\venv-capcut\Scripts\activate.bat"
+
+REM acha o automate_capcut.py (do lado do .bat ou dentro do VectCutAPI)
+set "SCRIPT=%AQUI%automate_capcut.py"
+if not exist "%SCRIPT%" set "SCRIPT=%VECT%\automate_capcut.py"
+if not exist "%SCRIPT%" (echo ERRO: nao achei automate_capcut.py & pause & exit /b)
+
+echo [1/4] Instalando dependencias (so na 1a vez)...
 pip install -q requests gdown faster-whisper pydub
 
-REM 3) sobe o servidor da API em outra janela
-echo [2/4] Iniciando servidor da API (porta 9001)...
-start "VectCut Server" cmd /k "call venv-capcut\Scripts\activate.bat && python capcut_server.py"
+echo [2/4] Subindo o servidor da API (porta 9001)...
+start "VectCut Server" cmd /k "call "%VECT%\venv-capcut\Scripts\activate.bat" && python "%VECT%\capcut_server.py""
 
-echo [3/4] Aguardando o servidor subir...
+echo [3/4] Aguardando o servidor...
 timeout /t 8 /nobreak >nul
 
-REM 4) roda a automacao (corta silencios, transicoes, efeitos, trilha, legenda, move pro CapCut)
-echo [4/4] Editando o video...
+echo [4/4] Editando (cortes, transicao, efeito, trilha, legenda)...
 echo.
-python automate_capcut.py
+python "%SCRIPT%"
 
 echo.
 echo ============================================
-echo   TERMINOU. Abra o CapCut: o projeto deve
-echo   aparecer na lista, ja editado.
+echo    TERMINOU. Abra o CapCut: o projeto ja
+echo    aparece na lista, editado.
 echo ============================================
 pause
