@@ -1,0 +1,11 @@
+# Video editing working files (large binaries — not for version control)
+videos/
+*.mov
+*.mp4
+*.mkv
+
+# video-use skill runtime / secrets
+.claude/skills/video-use/.env
+
+__pycache__/
+*.pyc
