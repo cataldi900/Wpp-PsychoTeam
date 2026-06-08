@@ -36,11 +36,11 @@ DEFAULT_NAME  = "IMG_7844.mov"
 WIDTH, HEIGHT = 1080, 1920
 
 # título
-TITLE_TEXT, TITLE_FONT = "ESFORÇO ≠ RESULTADO", "Source Han Sans"
+TITLE_TEXT, TITLE_FONT = "ESFORÇO ≠ RESULTADO", "SourceHanSansCN_Bold"
 TITLE_COLOR, TITLE_SIZE, TITLE_Y = "#FFFFFF", 15.0, 0.80
 TITLE_START, TITLE_END = 0.0, 5.0
 # legenda (fundo laranja)
-SUB_FONT, SUB_COLOR, SUB_SIZE, SUB_BG, SUB_Y = "Source Han Sans", "#FFFFFF", 7.0, "#FF6600", -0.80
+SUB_FONT, SUB_COLOR, SUB_SIZE, SUB_BG, SUB_Y = "SourceHanSansCN_Regular", "#FFFFFF", 7.0, "#FF6600", -0.80
 WHISPER_MODEL = "small"
 # silêncios
 REMOVE_SILENCES, SIL_THRESH_DB, MIN_SIL_MS, KEEP_PAD_MS = True, -35, 350, 120
@@ -91,6 +91,16 @@ def pick(names, prefer):
             if n and p.lower() in str(n).lower():
                 return n
     return names[0] if names else None
+
+
+def safe(label, fn):
+    """Executa um passo opcional; se falhar, avisa e segue (não derruba o draft)."""
+    try:
+        fn(); return True
+    except Exception as e:
+        msg = str(e)
+        print(f"[aviso] '{label}' pulado: {msg[:180]}")
+        return False
 
 
 def get_draft_id(out):
@@ -269,7 +279,10 @@ def main():
     # reconhecer recursos disponíveis na API
     transition = pick(get_types("get_transition_types"), TRANS_PREFER) if APPLY_TRANSITIONS else None
     effect     = pick(get_types("get_video_scene_effect_types"), EFFECT_PREFER) if APPLY_EFFECTS else None
-    print(f"[auto] transição='{transition}'  efeito='{effect}'")
+    fonts = get_types("get_font_types")
+    title_font = pick(fonts, ["SourceHanSansCN_Bold","SourceHanSansTW_Bold","思源黑体","SourceHanSans","Bold"]) or TITLE_FONT
+    sub_font   = pick(fonts, ["SourceHanSansCN_Regular","SourceHanSansCN_Medium","SourceHanSansCN_Normal","思源黑体","SourceHanSans"]) or SUB_FONT
+    print(f"[auto] transição='{transition}' efeito='{effect}' fonte='{title_font}'/'{sub_font}'")
 
     out=api("create_draft",{"width":WIDTH,"height":HEIGHT}); draft_id=get_draft_id(out)
     print(f"[draft] {draft_id}")
@@ -288,19 +301,18 @@ def main():
         dur=ffprobe_duration(video) or 0.0; kept=[(0.0,dur)]; total=dur
     mapper,total=mapper_for(kept)
 
-    # título
-    api("add_text",{"draft_id":draft_id,"text":TITLE_TEXT,"start":TITLE_START,"end":TITLE_END,
-        "font":TITLE_FONT,"font_color":TITLE_COLOR,"font_size":TITLE_SIZE,
-        "transform_x":0.0,"transform_y":TITLE_Y,"track_name":"title"})
+    # título (não derruba o draft se a fonte/campo falhar)
+    safe("título", lambda: api("add_text",{"draft_id":draft_id,"text":TITLE_TEXT,
+        "start":TITLE_START,"end":TITLE_END,"font":title_font,"font_color":TITLE_COLOR,
+        "font_size":TITLE_SIZE,"transform_x":0.0,"transform_y":TITLE_Y,"track_name":"title"}))
 
     # legenda + zoom por palavra-chave
     segments=transcribe(video)
     if segments:
         srt=write_srt(segments,mapper,os.path.join(INPUT_DIR,"legenda.srt"))
-        api("add_subtitle",{"draft_id":draft_id,"srt":srt,"font":SUB_FONT,"font_size":SUB_SIZE,
-            "font_color":SUB_COLOR,"transform_x":0.0,"transform_y":SUB_Y,
-            "background_color":SUB_BG,"background_alpha":1.0,"background_style":1,"track_name":"subtitle"})
-        print("[ok] legenda (fundo laranja)")
+        safe("legenda", lambda: api("add_subtitle",{"draft_id":draft_id,"srt":srt,"font":sub_font,
+            "font_size":SUB_SIZE,"font_color":SUB_COLOR,"transform_x":0.0,"transform_y":SUB_Y,
+            "background_color":SUB_BG,"background_alpha":1.0,"background_style":1,"track_name":"subtitle"}))
 
     zwin=list(ZOOM_MOMENTS)
     if AUTO_ZOOM_ON_KEYWORDS and segments:
@@ -308,13 +320,12 @@ def main():
             if any(kw in s["text"].upper() for kw in KEYWORDS):
                 a,b=mapper(s["start"]),mapper(s["end"])
                 if b-a>=0.4: zwin.append((a,b))
-    for a,b in zwin: add_zoom(draft_id,a,b)
-    if zwin: print(f"[ok] {len(zwin)} zooms")
+    if zwin: safe("zoom", lambda: [add_zoom(draft_id,a,b) for a,b in zwin])
 
     # efeitos + SFX + overlays
-    add_effects_at(draft_id,cuts,effect)
-    if SFX_TRANSITIONS and cuts: add_sfx(draft_id,cuts); print(f"[ok] {len(cuts)} SFX")
-    add_overlays(draft_id,IMAGE_OVERLAYS)
+    safe("efeitos", lambda: add_effects_at(draft_id,cuts,effect))
+    if SFX_TRANSITIONS and cuts: safe("sfx", lambda: add_sfx(draft_id,cuts))
+    safe("overlays", lambda: add_overlays(draft_id,IMAGE_OVERLAYS))
 
     # trilha de expectativa
     music=MUSIC_PATH
@@ -322,8 +333,8 @@ def main():
         music=os.path.join(INPUT_DIR,"trilha_expectativa.wav")
         print("[music] gerando trilha de expectativa..."); gen_anticipation(music,total)
     if os.path.exists(music):
-        api("add_audio",{"draft_id":draft_id,"audio_url":music,"volume":MUSIC_VOLUME,"track_name":"music"})
-        print("[ok] trilha")
+        safe("trilha", lambda: api("add_audio",{"draft_id":draft_id,"audio_url":music,
+            "volume":MUSIC_VOLUME,"track_name":"music"}))
 
     # salvar + mover
     print(f"[save] {api('save_draft',{'draft_id':draft_id,'draft_folder':CAPCUT_DRAFTS})}")
