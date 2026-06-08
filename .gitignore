@@ -6,3 +6,6 @@ videos/
 
 # video-use skill runtime / secrets
 .claude/skills/video-use/.env
+
+__pycache__/
+*.pyc
