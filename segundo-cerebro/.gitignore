@@ -1,0 +1,12 @@
+# Cache de workspace/estado local do Obsidian (não vale a pena versionar)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+
+# Anexos colados automaticamente (descomente se não quiser versionar binários)
+# 99-Anexos/
+
+# Dados sensíveis de clientes reais — ver Protocolos/Privacidade-e-LGPD.md
+# Descomente para manter prontuários fora do git:
+# 06-PsychoTeam/Clientes/
