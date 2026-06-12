@@ -4,24 +4,27 @@
 - **Duração do take:** ~5–7s (Flow/Veo gera ≤8s por clip)
 - **Arquivo de vídeo:** `takes/take-01.mp4`
 - **Layout:** Motion-only (você não aparece; só áudio + tipografia em tela cheia)
-- **Estilo:** Híbrido energético — acento laranja
+- **Estilo:** **Apple-clean** — frosted glass, SF Pro, easing leve, asterisco laranja como acento
 - **Fala (transcrição):** `TODO`
-- **Função no reel:** HOOK (0–~7s) — parar o scroll, alta densidade visual
+- **Função no reel:** HOOK (0–~7s) — parar o scroll, manifesto visual premium
 
 ## Prompt para o Google Flow (Veo) — 9:16
 
 ```
-Vertical 9:16 motion graphics, fundo preto profundo com leve textura de academia
-desfocada. Tipografia cinética UPPERCASE branca, peso bold condensado, entrando
-com snap rápido e micro-shake no impacto. Palavra gigante "FARMER WALK" preenche
-o terço central, com um traço/underline laranja vibrante riscando por baixo no
-beat. Partículas finas de poeira/giz subindo. Câmera com leve push-in. Corte seco
-no final para o próximo take. Sem pessoas. 1080x1920, ~6s, 30fps, energético.
+Vertical 9:16 motion graphics, estética Apple keynote / premium institucional.
+Fundo cinza-grafite muito escuro com gradiente sutil e profundidade leve (bokeh
+discreto, sem ruído). Um painel de vidro fosco (frosted glass translúcido, blur
+real ao fundo, cantos arredondados, sombra macia) surge no centro com mola suave
+e easing leve — nada de snap brusco. Sobre o painel, tipografia SF Pro Display
+semibold, mixed case, espaçamento generoso: a headline do hook. A palavra-chave
+"Farmer Walk" ganha um asterisco laranja (*) vibrante ao lado como único acento de
+cor. Micro-paralaxe e leve push-in de câmera. Luz limpa, elegante, premium. Sem
+pessoas. 1080x1920, ~6s, 30fps.
 ```
 
 ## Notas de composição (9:16)
 
-- Keyword "FARMER WALK" centralizada na coluna sagrada.
-- Sub-hook (a frase falada) entra no terço superior, abaixo da safe area de 12%.
-- Acento laranja só no underline/asterisco — resto em P&B pra contraste.
+- Painel de vidro centralizado na coluna sagrada; headline abaixo da safe area de topo (12%).
+- Único acento de cor = asterisco/detalhe laranja. Todo o resto neutro (grafite/branco).
+- Movimento contido e premium (easing leve), não energético/agressivo.
 - Termina em corte seco sincronizado com a primeira pausa da fala.

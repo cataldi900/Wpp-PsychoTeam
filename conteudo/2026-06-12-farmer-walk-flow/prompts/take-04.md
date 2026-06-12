@@ -4,24 +4,25 @@
 - **Duração do take:** ~4–6s
 - **Arquivo de vídeo:** `takes/take-04.mp4`
 - **Layout:** Motion-only (tela cheia de animação; só áudio)
-- **Estilo:** Híbrido energético — acento laranja, fechamento com "silêncio visual"
+- **Estilo:** **Apple-clean** — fecha com silêncio visual + asterisco laranja sumindo
 - **Fala (transcrição):** `TODO`
 - **Função no reel:** CTA + assinatura — fechar e converter (salvar/seguir)
 
 ## Prompt para o Google Flow (Veo) — 9:16
 
 ```
-Vertical 9:16 motion graphics, fundo preto. Texto UPPERCASE bold gigante
-"SALVA ESSE TREINO" entrando com snap no centro, ícone de salvar (bookmark)
-laranja pulsando ao lado. Embaixo, em menor, "@seu_perfil" e uma linha fina
-laranja. No último segundo tudo recua para silêncio visual: sobra só um asterisco
-laranja que some com fade (princípio "silêncio antes do reset"). Sem pessoas.
-1080x1920, ~5s, 30fps, limpo e premium.
+Vertical 9:16 motion graphics, estética Apple-clean premium institucional. Fundo
+cinza-grafite escuro. Um painel de vidro fosco central surge com mola suave e
+easing leve, tipografia SF Pro Display semibold: "Salva esse treino", com um ícone
+bookmark laranja discreto ao lado. Abaixo, menor, em SF Pro regular: "@seu_perfil".
+Elegante, espaçado, sem pressa. No último 1 segundo, todos os elementos recuam
+suavemente (silêncio visual / "silence before reset") até sobrar apenas um asterisco
+laranja (*) no centro, que some com fade. Sem pessoas. 1080x1920, ~5s, 30fps.
 ```
 
 ## Notas de composição (9:16)
 
-- CTA centralizado, mas o handle/@ acima da safe area de base (18%).
-- Fecha com 0,5–1s de quase-vazio pro loop do reel respirar.
-- Asterisco laranja = assinatura da marca (mesma do exemplo gemini-omni).
+- CTA centralizado; handle/@ acima da safe area de base (18%).
+- Fecha com 0,5–1s de quase-vazio (asterisco laranja sumindo) pro loop do reel respirar.
+- Asterisco laranja = assinatura da marca (a mesma do fluxo gemini-omni).
 - Substituir "@seu_perfil" pelo handle real.

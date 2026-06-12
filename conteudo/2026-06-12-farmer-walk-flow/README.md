@@ -4,7 +4,7 @@
 - **Formato:** VERTICAL **9:16** (gravado 2160×3840) → saída alvo **1080×1920**
 - **Duração total:** TODO (definir após transcrição)
 - **Takes:** 4 clips, cortados em fim de frase / na pausa
-- **Estilo de motion:** Híbrido energético (estrutura clean + tipografia UPPERCASE + acento laranja) — trocável por Apple-clean
+- **Estilo de motion:** **Apple-clean** — *frosted glass, SF Pro, easing leve, asterisco laranja como acento; credibilidade premium institucional* (exatamente o estilo descrito nos prints do fluxo gemini-omni)
 - **Status:** SCAFFOLD. Falas e ranges marcados `TODO` — preencher quando os vídeos chegarem e a transcrição (Whisper) rodar.
 
 > ⚠️ Este é o esqueleto montado **sem o footage** (os .mov de 50 MB não passaram pelo conector do Drive nem pela rede do ambiente). Os prompts já estão pasteáveis no Google Flow; ranges e falas exatas entram depois.
@@ -31,3 +31,10 @@
 - **Stack vertical:** hook no terço superior, keyword no centro, CTA no terço inferior (acima da safe zone).
 - **Áudio:** passa byte-for-byte do original; nada de re-encode do áudio nos cortes (fades de 30 ms nas bordas).
 - **Correções de transcrição:** termos técnicos ("farmer walk", "grip") conferidos manualmente antes de virar texto na tela.
+
+### Apple-clean — regras herdadas dos prints
+
+- **Frosted glass mais opaco nos overlays (T2/T3)** pra garantir legibilidade do texto sobre o footage de alta resolução.
+- **Acento de cor único = laranja** (asterisco/risco/check/linha). Todo o resto neutro: grafite + branco, SF Pro.
+- **Easing leve** em tudo — movimento premium e contido, nunca snap agressivo.
+- **T4 fecha com "silêncio visual"**: os elementos recuam e sobra só o asterisco laranja sumindo com fade ("silence before reset").
