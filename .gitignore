@@ -1,0 +1,9 @@
+# Source footage / session outputs pulled from Drive — never commit media
+videos/
+*.mov
+*.mp4
+*.mkv
+*.webm
+
+# video-use runtime secret
+.env
