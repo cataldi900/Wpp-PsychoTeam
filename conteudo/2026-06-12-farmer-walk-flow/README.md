@@ -18,6 +18,16 @@
 | 03 | 0:XX–0:XX | Overlay | ERRO riscado + ✓ CERTO — cues de técnica |
 | 04 | 0:XX–0:XX | Motion-only | CTA "SALVA ESSE TREINO" + assinatura |
 
+## Base visual unificada (atualizada)
+
+- **Fundo de todos os takes:** parede branca minimalista com ar-condicionado split no alto — `frames/ac-background.png`. Anexar como **imagem de referência / primeiro frame** no Flow.
+- **Hélice do ar girando** continuamente em todos os takes (no T4 ela desacelera junto com o "silêncio visual").
+- **Talking head** (você) composto na frente dessa parede nos takes de corpo (T2/T3).
+- **Montagem animada do farmer walk:** o footage real do exercício é costurado no ritmo da fala (subir como *ingrediente de vídeo* no Flow).
+- **Apple-clean** mantido: frosted glass, SF Pro, easing leve, asterisco laranja como único acento.
+
+> **Como o "Flow identifica as palavras" de fato funciona:** o Google Flow **não escuta o seu áudio**. Quem identifica as palavras é a **transcrição (Whisper, rodada aqui)** — ela gera os timestamps e o texto, que eu embuto nos prompts pra cada animação cair na palavra certa. O Flow então **gera o visual** a partir do prompt. Por isso ainda preciso dos vídeos (mesmo comprimidos) pra rodar o Whisper e travar a sincronia.
+
 ## Divisão de trabalho
 
 1. **Aqui (skill):** transcrição Whisper → `splits.json` → corte dos takes → estes prompts → README.
