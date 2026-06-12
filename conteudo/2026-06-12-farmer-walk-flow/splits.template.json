@@ -1,0 +1,12 @@
+{
+  "_comment": "Preenchido automaticamente após a transcrição Whisper dos .mov. Ranges em segundos no original; cada corte cai numa pausa (fim de frase).",
+  "format": "9:16",
+  "target_resolution": "1080x1920",
+  "source_files": ["IMG_7946.mov", "IMG_7950.mov", "IMG_7956.mov"],
+  "takes": [
+    { "id": 1, "source": "TODO", "start": null, "end": null, "layout": "motion-only", "tema": "HOOK FARMER WALK",       "fala": "TODO" },
+    { "id": 2, "source": "TODO", "start": null, "end": null, "layout": "overlay",     "tema": "BENEFICIOS laterais",     "fala": "TODO" },
+    { "id": 3, "source": "TODO", "start": null, "end": null, "layout": "overlay",     "tema": "ERRO x CERTO / tecnica",   "fala": "TODO" },
+    { "id": 4, "source": "TODO", "start": null, "end": null, "layout": "motion-only", "tema": "CTA + assinatura",         "fala": "TODO" }
+  ]
+}
