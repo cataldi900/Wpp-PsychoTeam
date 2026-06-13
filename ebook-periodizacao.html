@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>PsychoTeam · Como Organizar Sua Periodização</title>
+<style>
+  /* ---------- FONTES ---------- */
+  @font-face{ font-family:'Anton'; src:url('assets/fonts/Anton-Regular.ttf'); font-weight:400; }
+  @font-face{ font-family:'Oswald'; src:url('assets/fonts/Oswald.ttf'); font-weight:300 700; }
+  @font-face{ font-family:'Inter'; src:url('assets/fonts/Inter.ttf'); font-weight:100 900; font-style:normal; }
+  @font-face{ font-family:'Inter'; src:url('assets/fonts/Inter-Italic.ttf'); font-weight:100 900; font-style:italic; }
+  @font-face{ font-family:'Lora'; src:url('assets/fonts/Lora-Italic.ttf'); font-weight:400 700; font-style:italic; }
+  @font-face{ font-family:'Lora'; src:url('assets/fonts/Lora.ttf'); font-weight:400 700; font-style:normal; }
+
+  /* ---------- VARIÁVEIS ---------- */
+  :root{
+    --bg:#0d0c0a;
+    --bg2:#100e0b;
+    --gold:#c9a24a;
+    --gold-deep:#a9842f;
+    --gold-soft:#d9bd7c;
+    --ink:#f4f1ea;
+    --body:#bdb9b0;
+    --muted:#6d685d;
+    --line:#2a261d;
+    --box:#1a1813;
+  }
+
+  @page{ size:A4; margin:0; }
+  *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:'Inter',sans-serif; color:var(--body); background:var(--bg); }
+
+  .page{
+    position:relative;
+    width:210mm; height:297mm;
+    background:var(--bg);
+    padding:18mm 20mm;
+    overflow:hidden;
+    page-break-after:always;
+  }
+  .page:last-child{ page-break-after:auto; }
+
+  /* dotted pattern */
+  .dots{
+    position:absolute;
+    background-image:radial-gradient(var(--gold) 0.7px, transparent 0.8px);
+    background-size:11px 11px;
+    opacity:.10;
+  }
+
+  /* ---------- TOPO / HEADER ---------- */
+  .brand{
+    font-family:'Inter',sans-serif; font-weight:700;
+    letter-spacing:.42em; font-size:8.5pt; color:var(--gold);
+    text-transform:uppercase;
+  }
+  .runhead{
+    display:flex; justify-content:space-between; align-items:center;
+    letter-spacing:.18em; font-size:6.6pt; color:var(--muted);
+    text-transform:uppercase; font-weight:600;
+    padding-bottom:7px; border-bottom:1px solid var(--line);
+  }
+  .runhead .r{ color:var(--gold-deep); letter-spacing:.22em; }
+
+  /* ---------- CAPA ---------- */
+  .cover .top-rule{ border-bottom:1.5px solid var(--gold); margin-top:9px; }
+  .cover h1{
+    font-family:'Anton',sans-serif; font-weight:400;
+    text-transform:uppercase; color:var(--ink);
+    font-size:46pt; line-height:.98; letter-spacing:.005em;
+    margin:62mm 0 0 0;
+  }
+  .cover h1 .g{ color:var(--gold); display:block; }
+  .cover .sub-rule{ width:62%; border-bottom:1px solid var(--gold-deep); margin:14px 0 14px; }
+  .cover .lead{
+    font-family:'Lora',serif; font-style:italic; font-size:12.5pt;
+    color:var(--gold-soft); line-height:1.5; max-width:58%;
+  }
+  .cover .bignum{
+    position:absolute; right:14mm; bottom:30mm;
+    font-family:'Anton',sans-serif; font-size:240pt; line-height:.7;
+    color:#1a160e; z-index:0;
+  }
+  .cover .footer{
+    position:absolute; left:20mm; right:20mm; bottom:20mm;
+  }
+  .cover .footer .frule{ border-top:1px solid var(--line); margin-bottom:11px; }
+  .cover .tags{ font-size:8pt; letter-spacing:.05em; color:var(--muted); margin-bottom:9px; }
+  .cover .by{ font-weight:700; color:var(--gold); font-size:9.5pt; letter-spacing:.02em; margin-bottom:8px; }
+  .cover .note{ font-size:7pt; letter-spacing:.18em; color:#46423a; text-transform:uppercase; }
+
+  /* ---------- PÁGINA DE DICA ---------- */
+  .tip .head{ display:flex; align-items:center; gap:16px; margin:14mm 0 0; }
+  .badge{
+    flex:0 0 auto; width:62px; height:62px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--gold-soft), var(--gold) 55%, var(--gold-deep));
+    color:#23200f; font-family:'Anton',sans-serif; font-size:24pt;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 6px rgba(201,162,74,.08);
+  }
+  .tip h2{
+    font-family:'Anton',sans-serif; font-weight:400; text-transform:uppercase;
+    color:var(--ink); font-size:25pt; line-height:1.0; margin:0; letter-spacing:.01em;
+  }
+  .tip .dek{
+    font-family:'Lora',serif; font-style:italic; color:var(--gold);
+    font-size:11.5pt; margin:16px 0 18px; line-height:1.45;
+  }
+  .tip p{ font-size:10.5pt; line-height:1.72; margin:0 0 13px; color:var(--body); }
+  .tip p strong{ color:var(--ink); font-weight:600; }
+  .tip .gold-word{ color:var(--gold-soft); font-weight:600; }
+
+  .diag{ margin:6mm 0 0; padding-top:10px; border-top:1px solid var(--line); }
+
+  /* tabela de prescrição */
+  table.rx{ width:100%; border-collapse:collapse; margin-top:4mm; font-size:9.5pt; }
+  table.rx th{
+    text-align:left; font-family:'Inter'; font-weight:700; color:var(--gold);
+    text-transform:uppercase; letter-spacing:.12em; font-size:7pt;
+    padding:0 10px 9px; border-bottom:1px solid var(--gold-deep);
+  }
+  table.rx td{ padding:11px 10px; border-bottom:1px solid var(--line); color:var(--body); vertical-align:middle; }
+  table.rx td.day{ color:var(--ink); font-weight:600; }
+  table.rx td.ex{ color:var(--ink); }
+  table.rx td.load{ font-family:'Oswald'; font-weight:600; color:var(--gold-soft); letter-spacing:.02em; }
+  table.rx td.role{ font-size:7.5pt; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); }
+  table.rx .pill{
+    display:inline-block; padding:3px 9px; border:1px solid var(--gold-deep); border-radius:20px;
+    color:var(--gold); font-size:7pt; letter-spacing:.12em; text-transform:uppercase;
+  }
+
+  /* caixa de autoanálise / nota */
+  .callout{
+    margin-top:7mm; background:var(--box); border-left:3px solid var(--gold);
+    padding:15px 20px 16px;
+  }
+  .callout .lab{
+    font-family:'Inter'; font-weight:700; color:var(--gold);
+    letter-spacing:.16em; font-size:7.5pt; text-transform:uppercase; display:block; margin-bottom:7px;
+  }
+  .callout .txt{ font-family:'Lora',serif; font-style:italic; color:#cdc7b8; font-size:9.8pt; line-height:1.55; }
+
+  .pagenum{ position:absolute; left:0; right:0; bottom:14mm; text-align:center; color:var(--gold-deep); font-size:8pt; letter-spacing:.2em; }
+  .pagenum::before, .pagenum::after{ content:'·'; margin:0 10px; color:var(--line); }
+
+  /* ---------- CTA ---------- */
+  .cta{ display:flex; flex-direction:column; }
+  .cta .brand2{ border-bottom:1px solid var(--line); padding-bottom:9px; }
+  .cta .center{ margin-top:42mm; text-align:center; }
+  .cta h2{
+    font-family:'Anton',sans-serif; font-weight:400; text-transform:uppercase; color:var(--ink);
+    font-size:30pt; line-height:1.04; margin:0;
+  }
+  .cta h2 .g{ color:var(--gold); display:block; }
+  .cta .crule{ width:72%; margin:18px auto 18px; border-bottom:1px solid var(--gold-deep); }
+  .cta .ctxt{ max-width:74%; margin:0 auto; font-size:10.5pt; line-height:1.62; color:var(--body); }
+  .cta .ctxt b{ color:var(--ink); }
+  .cta .btn{
+    display:block; width:74%; margin:30px auto 0; text-align:center;
+    background:linear-gradient(180deg,var(--gold-soft),var(--gold) 60%,var(--gold-deep));
+    color:#241f0d; font-weight:700; font-size:12pt; letter-spacing:.02em;
+    padding:16px 0; border-radius:3px; text-decoration:none;
+  }
+  .cta .wa{ display:block; text-align:center; margin-top:12px; color:var(--gold-deep); font-size:8.5pt; letter-spacing:.06em; }
+  .cta .arrow{ margin:34px auto 0; display:block; }
+  .cta .cfooter{ position:absolute; left:20mm; right:20mm; bottom:18mm; text-align:center; }
+  .cta .cfooter .frule{ border-top:1px solid var(--line); margin-bottom:10px; }
+  .cta .cfooter .note{ font-size:7pt; letter-spacing:.16em; color:#46423a; text-transform:uppercase; }
+  .disc{
+    max-width:78%; margin:26px auto 0; padding:13px 18px;
+    border:1px solid var(--line); background:rgba(255,255,255,.015);
+    font-family:'Lora',serif; font-style:italic; color:#9c968a; font-size:8.8pt; line-height:1.5;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA ============ -->
+<section class="page cover">
+  <div class="brand">PSYCHOTEAM</div>
+  <div class="top-rule"></div>
+
+  <div class="bignum">3</div>
+
+  <h1>COMO ORGANIZAR<span class="g">SUA</span>PERIODIZAÇÃO</h1>
+  <div class="sub-rule"></div>
+  <div class="lead">Um guia direto pra distribuir agachamento, supino e terra na semana, com a função certa pra cada sessão.</div>
+
+  <div class="dots" style="right:8mm; bottom:24mm; width:120mm; height:120mm;"></div>
+
+  <div class="footer">
+    <div class="frule"></div>
+    <div class="tags">Treinamento de Força &middot; Powerlifting &middot; Hipertrofia</div>
+    <div class="by">por Guilherme Moreti &middot; Coach PsychoTeam</div>
+    <div class="note">Material exclusivo. Reprodução proibida sem autorização.</div>
+  </div>
+</section>
+
+<!-- ============ DICA 1 ============ -->
+<section class="page tip">
+  <div class="runhead"><span>PSYCHOTEAM &middot; COMO ORGANIZAR SUA PERIODIZAÇÃO</span><span class="r">PASSO 1 DE 5</span></div>
+
+  <div class="head">
+    <div class="badge">1</div>
+    <h2>A FREQUÊNCIA<br>NASCE DA RECUPERAÇÃO</h2>
+  </div>
+  <div class="dek">Antes de espalhar exercício pela semana, decide pra que serve cada sessão.</div>
+
+  <p>Organizar periodização não é lotar a semana de treino. É decidir <strong>quantas vezes</strong> você toca cada padrão e, mais importante que isso, <strong>pra que serve</strong> cada sessão. Quem manda nessa conta é a sua recuperação, não a sua vontade de treinar.</p>
+
+  <p>Na prática, o que funciona pra maioria é trabalhar cada grande levantamento em dois papéis: um <span class="gold-word">movimento principal</span> e uma <span class="gold-word">variação</span>. O principal leva a intensidade um pouco maior e é onde você busca progredir semana após semana. A variação puxa menos, fica num volume intermediário e começa bem mais leve, lá em <strong>RPE 5 a 6</strong>.</p>
+
+  <p>Essa separação é o que segura a casa. O principal é onde a força aparece e é testada. A variação acumula trabalho sem brigar pela mesma recuperação. Quando os dois querem ser pesados ao mesmo tempo, a conta não fecha e o ciclo empaca.</p>
+
+  <div class="diag">
+    <svg viewBox="0 0 600 175" width="100%" height="175">
+      <defs>
+        <linearGradient id="gp" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#a9842f"/><stop offset="1" stop-color="#d9bd7c"/>
+        </linearGradient>
+      </defs>
+      <!-- eixos sutis -->
+      <line x1="40" y1="150" x2="575" y2="150" stroke="#2a261d" stroke-width="1"/>
+      <!-- principal: progressão íngreme -->
+      <polyline points="45,128 150,110 255,88 360,62 465,38 560,18" fill="none" stroke="url(#gp)" stroke-width="2.4"/>
+      <circle cx="560" cy="18" r="3.2" fill="#d9bd7c"/>
+      <text x="45" y="118" fill="#d9bd7c" font-family="Inter" font-size="9" letter-spacing="2">PRINCIPAL · progride mais</text>
+      <!-- variação: progressão suave -->
+      <polyline points="45,140 150,134 255,128 360,123 465,118 560,113" fill="none" stroke="#7d7a72" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <circle cx="560" cy="113" r="3" fill="#7d7a72"/>
+      <text x="45" y="165" fill="#7d7a72" font-family="Inter" font-size="9" letter-spacing="2">VARIAÇÃO · começa em RPE 5 a 6, sobe pouco</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <span class="lab">Ponto de autoanálise</span>
+    <span class="txt">Olha a sua semana de hoje: cada exercício tem um papel claro ou tá todo mundo "pesado" brigando pela mesma recuperação? Se é tudo principal, no fim das contas nada é principal.</span>
+  </div>
+
+  <div class="pagenum">1</div>
+</section>
+
+<!-- ============ DICA 2 — AGACHAMENTO ============ -->
+<section class="page tip">
+  <div class="runhead"><span>PSYCHOTEAM &middot; COMO ORGANIZAR SUA PERIODIZAÇÃO</span><span class="r">PASSO 2 DE 5</span></div>
+
+  <div class="head">
+    <div class="badge">2</div>
+    <h2>AGACHAMENTO:<br>PRINCIPAL E VARIAÇÃO</h2>
+  </div>
+  <div class="dek">Pra maioria, dois agachamentos na semana é o ponto certo.</div>
+
+  <p>Pela recuperação da maior parte das pessoas, <strong>dois agachamentos por semana</strong> costuma ser o equilíbrio: dá estímulo de sobra pra progredir sem cobrar mais do que o corpo devolve. O segredo é deixar um como principal e o outro como variação.</p>
+
+  <p>O <span class="gold-word">agachamento principal</span> pega a intensidade um pouco maior e é onde você tenta subir carga ao longo das semanas. É a sessão mais parecida com o que vai ser testado lá na frente. A <span class="gold-word">variação</span> entra com volume intermediário, intensidade começando em <strong>RPE 5 a 6</strong> e zero pressa pra evoluir carga. Ela tá ali pra somar trabalho bem feito e tampar buraco técnico.</p>
+
+  <table class="rx">
+    <thead><tr><th>Sessão</th><th>Exemplo</th><th>Série × Reps</th><th>Intensidade</th></tr></thead>
+    <tbody>
+      <tr><td class="day">Principal</td><td class="ex">Back Squat</td><td class="load">4 × 4</td><td><span class="pill">RPE 6,5 → progride</span></td></tr>
+      <tr><td class="day">Variação</td><td class="ex">Pause Squat</td><td class="load">3 × 6</td><td><span class="pill">RPE 5 a 6</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <span class="lab">Como conduzir nas semanas</span>
+    <span class="txt">No principal, a carga sobe e o RPE acompanha o bloco. Na variação, segura a mão: melhor manter a técnica limpa e deixar o RPE subir devagar do que correr atrás de carga toda semana.</span>
+  </div>
+
+  <div class="pagenum">2</div>
+</section>
+
+<!-- ============ DICA 3 — SUPINO ============ -->
+<section class="page tip">
+  <div class="runhead"><span>PSYCHOTEAM &middot; COMO ORGANIZAR SUA PERIODIZAÇÃO</span><span class="r">PASSO 3 DE 5</span></div>
+
+  <div class="head">
+    <div class="badge">3</div>
+    <h2>SUPINO: PRINCIPAL,<br>VARIAÇÃO E VOLUME</h2>
+  </div>
+  <div class="dek">Supino recupera fácil, então dá pra colocar uma terceira sessão.</div>
+
+  <p>O supino segue a mesma ideia do agachamento: principal com intensidade um pouco maior e mais progressão, variação mais leve. Só que, como ele cansa menos, dá pra ir além e colocar <strong>ainda uma terceira sessão</strong>, com <span class="gold-word">volume mais alto e intensidade baixa</span>.</p>
+
+  <p>Essa terceira não é pra puxar carga. Ela serve pra acumular repetição de qualidade, lapidar a técnica e dar mais tempo de barra, tudo numa fadiga que não estraga o principal. Na prática, uma semana fica mais ou menos assim:</p>
+
+  <table class="rx">
+    <thead><tr><th>Dia</th><th>Exercício</th><th>Série × Reps</th><th>Intensidade</th><th>Papel</th></tr></thead>
+    <tbody>
+      <tr><td class="day">Segunda</td><td class="ex">Paused Bench Press</td><td class="load">3 × 3</td><td><span class="pill">RPE 6,5</span></td><td class="role">Principal</td></tr>
+      <tr><td class="day">Quarta</td><td class="ex">Pin Press</td><td class="load">3 × 5</td><td><span class="pill">RPE 6</span></td><td class="role">Variação</td></tr>
+      <tr><td class="day">Sexta</td><td class="ex">Paused Bench Press</td><td class="load">3 × 8</td><td><span class="pill">RPE 4 a 5</span></td><td class="role">Volume</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <span class="lab">A leitura da semana</span>
+    <span class="txt">Repara no desenho: começa pesado e com pouca rep (o principal), passa pela variação no meio e termina em volume alto com RPE baixo. A semana inteira gira em torno de proteger o principal.</span>
+  </div>
+
+  <div class="pagenum">3</div>
+</section>
+
+<!-- ============ DICA 4 — TERRA ============ -->
+<section class="page tip">
+  <div class="runhead"><span>PSYCHOTEAM &middot; COMO ORGANIZAR SUA PERIODIZAÇÃO</span><span class="r">PASSO 4 DE 5</span></div>
+
+  <div class="head">
+    <div class="badge">4</div>
+    <h2>TERRA: MENOS<br>É MAIS NO INÍCIO</h2>
+  </div>
+  <div class="dek">Pra quem tá começando, uma vez na semana já resolve.</div>
+
+  <p>O terra é o que mais pesa na recuperação dos três. Por isso, pra muita gente, principalmente <strong>quem tá começando agora</strong>, uma sessão de terra por semana já basta pra evoluir de forma consistente.</p>
+
+  <p>Como é só uma exposição, ela pode vir com <span class="gold-word">intensidade mais alta</span> e pouca repetição, concentrando ali todo o estímulo de força. Algo na linha de:</p>
+
+  <table class="rx">
+    <thead><tr><th>Sessão</th><th>Exemplo</th><th>Série × Reps</th><th>Intensidade</th></tr></thead>
+    <tbody>
+      <tr><td class="day">Terra (1× / semana)</td><td class="ex">Deadlift</td><td class="load">3 × 4</td><td><span class="pill">RPE 6,5</span></td></tr>
+    </tbody>
+  </table>
+
+  <p>Conforme a força e a tolerância à fadiga crescem, dá pra encaixar uma variação mais leve lá na frente. Mas no começo, insistir em dois terras pesados quase sempre só rouba recuperação do agachamento, sem entregar nada em troca.</p>
+
+  <div class="callout">
+    <span class="lab">Ponto de autoanálise</span>
+    <span class="txt">Seu terra te deixa quebrado por dias e ainda atrapalha o agachamento? Então é frequência ou intensidade demais pro seu momento. Uma sessão bem dosada rende mais que duas mal recuperadas.</span>
+  </div>
+
+  <div class="pagenum">4</div>
+</section>
+
+<!-- ============ DICA 5 — MONTANDO A SEMANA ============ -->
+<section class="page tip">
+  <div class="runhead"><span>PSYCHOTEAM &middot; COMO ORGANIZAR SUA PERIODIZAÇÃO</span><span class="r">PASSO 5 DE 5</span></div>
+
+  <div class="head">
+    <div class="badge">5</div>
+    <h2>MONTANDO<br>A SEMANA</h2>
+  </div>
+  <div class="dek">Juntando tudo: 2 agachamentos, 3 supinos e 1 terra.</div>
+
+  <p>Com os papéis definidos, a semana praticamente se monta sozinha. O exemplo abaixo encaixa os três grandes respeitando a recuperação, com principal e volume bem longe um do outro e as variações no meio:</p>
+
+  <table class="rx">
+    <thead><tr><th>Dia</th><th>Exercício</th><th>Série × Reps</th><th>Intensidade</th><th>Papel</th></tr></thead>
+    <tbody>
+      <tr><td class="day">Segunda</td><td class="ex">Back Squat<br><span style="color:#6d685d;font-size:8pt">+ Paused Bench Press</span></td><td class="load">4 × 4<br><span style="font-size:8.5pt">3 × 3</span></td><td><span class="pill">RPE 6,5</span><br><span class="pill" style="margin-top:4px">RPE 6,5</span></td><td class="role">Agacho princ.<br>Supino princ.</td></tr>
+      <tr><td class="day">Quarta</td><td class="ex">Pin Press<br><span style="color:#6d685d;font-size:8pt">+ Deadlift</span></td><td class="load">3 × 5<br><span style="font-size:8.5pt">3 × 4</span></td><td><span class="pill">RPE 6</span><br><span class="pill" style="margin-top:4px">RPE 6,5</span></td><td class="role">Supino var.<br>Terra</td></tr>
+      <tr><td class="day">Sexta</td><td class="ex">Pause Squat<br><span style="color:#6d685d;font-size:8pt">+ Paused Bench Press</span></td><td class="load">3 × 6<br><span style="font-size:8.5pt">3 × 8</span></td><td><span class="pill">RPE 5 a 6</span><br><span class="pill" style="margin-top:4px">RPE 4 a 5</span></td><td class="role">Agacho var.<br>Supino vol.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <span class="lab">O princípio por trás do mapa</span>
+    <span class="txt">Cada padrão tem um principal que progride, variações que sustentam o volume e um respiro entre as cargas mais altas. Troca os exercícios à vontade. O que não muda é a função de cada sessão.</span>
+  </div>
+
+  <div class="pagenum">5</div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="page cta">
+  <div class="brand brand2">PSYCHOTEAM</div>
+
+  <div class="dots" style="left:14mm; right:14mm; bottom:24mm; width:auto; height:95mm;"></div>
+
+  <div class="center">
+    <h2>ISSO É UM PONTO<span class="g">DE PARTIDA</span></h2>
+    <div class="crule"></div>
+    <div class="ctxt">Essas diretrizes servem pra maioria, mas <b>não substituem a avaliação individual</b> de cada pessoa. Histórico, ponto fraco, rotina e recuperação mudam tudo.</div>
+    <div class="disc">Na PsychoTeam todo aluno começa com uma avaliação individual completa. Treino e nutrição montados pro seu corpo, com acompanhamento e ajuste do começo ao fim da jornada.</div>
+
+    <a class="btn" href="https://wa.me/message/546BBW7RMFXRB1">Fale comigo no WhatsApp →</a>
+    <span class="wa">wa.me/message/546BBW7RMFXRB1</span>
+
+    <svg class="arrow" width="180" height="34" viewBox="0 0 180 34">
+      <line x1="0" y1="17" x2="150" y2="17" stroke="#c9a24a" stroke-width="3"/>
+      <polygon points="150,4 180,17 150,30" fill="#c9a24a"/>
+    </svg>
+  </div>
+
+  <div class="cfooter">
+    <div class="frule"></div>
+    <div class="note">Material exclusivo. Reprodução proibida sem autorização.</div>
+  </div>
+</section>
+
+</body>
+</html>
