@@ -24,9 +24,10 @@ Mapa central dos padrões de progressão usados na consultoria. Cada nota é um 
 | 08 | [[08 - Progressão nas Variações Não é Regra]] | Variações | ✅ Ativo |
 | 09 | [[09 - Deload Antecipado]] | Recuperação | ✅ Ativo |
 | 10 | [[10 - Consolidação do Padrão de Movimento]] | Técnica | ✅ Ativo |
-| 11 | [[11 - Loom 74af05 - PENDENTE]] | Novo | ⏳ Aguarda transcrição |
+| 11 | [[11 - Semana Pesada · Foco em Progressão e Padrão (Loom 74af05)]] | Intensificação | ✅ Ativo (refinar c/ áudio) |
 | 12 | [[12 - Seleção de Variações por Ponto Fraco]] | Variações | ✅ Ativo |
 | 13 | [[13 - Preparação para Competição IPF]] | Competição | ✅ Ativo |
+| 14 | [[14 - Base de Evidências (59 Alunos · 849 Looms)]] | Evidência | ✅ Ativo |
 
 ---
 
@@ -39,6 +40,15 @@ Ao montar ou ajustar um ciclo de aluno:
 4. Ajuste cargas e RPE usando os dados de feedback semanal
 
 > **Regra geral:** quando em dúvida entre progredir e manter, manter. O custo de undershoot é corrigível na próxima semana. O custo de overshoot pode destruir semanas.
+
+---
+
+## Base empírica
+
+Os padrões acima são validados por dados reais da consultoria (59 alunos, 849
+feedbacks de Loom, ~3 anos). Ver:
+- [[14 - Base de Evidências (59 Alunos · 849 Looms)]] — síntese analítica
+- [[README|Base de Dados PsychoTeam]] — dados crus (timeline de PR, dossiê, Looms)
 
 ---
 

@@ -142,8 +142,33 @@ Ação imediata: reduzir volume (não carga). Investigar causa. Se 2+ semanas se
 
 ---
 
+## O que a base de dados confirma (calibração empírica)
+
+A [[14 - Base de Evidências (59 Alunos · 849 Looms)|base real]] de ~3 anos
+calibra meu raciocínio com números, não só princípios:
+
+- **Ritmo realista por lift:** ganho mediano de **Squat +35 / Bench +18 / Dead +40 kg**
+  sobre a carreira do aluno. O supino progride ~metade do ritmo dos outros — não
+  cobro do supino o mesmo ritmo de agacho/terra, e priorizo técnica nele.
+- **Single é a norma, não exceção:** quase todo plano histórico tem single. Sondar
+  carga alta com volume controlado embaixo é a espinha dorsal do método.
+- **Deload é econômico:** a maioria dos alunos teve 0–5 deloads em 100+ planos.
+  Deload é preciso e planejado, não frequente.
+- **Dieta ≈ força em prioridade:** é o 2º tema mais frequente nos feedbacks. Trato
+  progressão e dieta como um problema só.
+- **Quedas = lesão/reset, não fracasso:** curvas negativas na base coincidem com
+  Looms de "proteção/deload antecipado". Integridade vem antes do PR.
+
+> Antes de progredir um aluno específico, consulto a curva dele na
+> [[Timeline-Forca-por-Aluno]] e os Looms recentes no [[Dossie-Alunos (PR + Loom)]]
+> — progrido contra o **histórico dele**, não contra uma tabela genérica.
+
+---
+
 ## Referências de padrões
 
+- [[11 - Semana Pesada · Foco em Progressão e Padrão (Loom 74af05)]]
+- [[14 - Base de Evidências (59 Alunos · 849 Looms)]]
 - [[01 - Escala RPE e Estrutura da Sessão]]
 - [[02 - Top Set + Backoff]]
 - [[03 - Ciclo Completo de Periodização]]
