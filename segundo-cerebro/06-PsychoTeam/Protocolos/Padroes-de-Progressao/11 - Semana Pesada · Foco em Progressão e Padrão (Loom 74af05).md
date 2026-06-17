@@ -88,7 +88,21 @@ carga nova, sem abrir mão do padrão.**
 
 ---
 
-## A refinar quando chegar a transcrição verbatim
+## Como o Guilherme fala de "semana pesada / progressão / padrão" (verbatim)
+
+Embora este vídeo específico ainda não tenha transcrição, o corpus de 802
+feedbacks mostra exatamente a linguagem que ele usa nessa situação:
+
+- *"Você vai se distanciando do RP alto e deixa que a periodização te jogue nas cargas altas."* [Eduardo Felipe, 2026-06-10]
+- *"A ideia não é manter a carga, é manter a percepção do esforço, porque é isso que gera adaptação."* [Gabriel Cechin, 2026-04-20]
+- *"Bateu PR, guarda e próximo exercício."* (semana pesada com single) [Natan de Almeida, 2025-08-14]
+- Gate técnico do "padrão": só vale o ganho de carga se a técnica se manteve — ver os cues em [[16 - Cues Técnicos por Levantamento (verbatim)]].
+
+> Detalhamento completo do raciocínio em [[18 - Raciocínio Verbatim — RPE, Backoff, Deload e Singles]].
+
+---
+
+## A refinar quando chegar a transcrição verbatim do 74af05
 - [ ] Lift específico tratado no vídeo (agacho? supino? terra?)
 - [ ] Aluno(s) a quem o feedback foi dirigido
 - [ ] Números concretos de carga/RPE mencionados

@@ -28,6 +28,10 @@ Mapa central dos padrões de progressão usados na consultoria. Cada nota é um 
 | 12 | [[12 - Seleção de Variações por Ponto Fraco]] | Variações | ✅ Ativo |
 | 13 | [[13 - Preparação para Competição IPF]] | Competição | ✅ Ativo |
 | 14 | [[14 - Base de Evidências (59 Alunos · 849 Looms)]] | Evidência | ✅ Ativo |
+| 15 | [[15 - Voz e Léxico do Treinador (verbatim)]] | Comunicação | ✅ Ativo |
+| 16 | [[16 - Cues Técnicos por Levantamento (verbatim)]] | Técnica | ✅ Ativo |
+| 17 | [[17 - Dieta Integrada ao Treino (verbatim)]] | Dieta | ✅ Ativo |
+| 18 | [[18 - Raciocínio Verbatim — RPE, Backoff, Deload e Singles]] | Núcleo verbatim | ✅ Ativo |
 
 ---
 
@@ -46,9 +50,13 @@ Ao montar ou ajustar um ciclo de aluno:
 ## Base empírica
 
 Os padrões acima são validados por dados reais da consultoria (59 alunos, 849
-feedbacks de Loom, ~3 anos). Ver:
+feedbacks de Loom, **802 transcrições verbatim**, ~3 anos). Ver:
 - [[14 - Base de Evidências (59 Alunos · 849 Looms)]] — síntese analítica
-- [[README|Base de Dados PsychoTeam]] — dados crus (timeline de PR, dossiê, Looms)
+- [[18 - Raciocínio Verbatim — RPE, Backoff, Deload e Singles]] — regras nas palavras do coach
+- [[15 - Voz e Léxico do Treinador (verbatim)]] — como ele comunica
+- [[16 - Cues Técnicos por Levantamento (verbatim)]] — correções por lift
+- [[17 - Dieta Integrada ao Treino (verbatim)]]
+- [[README|Base de Dados PsychoTeam]] — dados crus (timeline de PR, dossiê, Looms, transcrições)
 
 ---
 
