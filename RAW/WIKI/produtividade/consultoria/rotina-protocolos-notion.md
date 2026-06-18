@@ -153,6 +153,8 @@ Diretrizes Gerais do Treino:
 
 Formatação Notion: cores {color="orange|red|purple|blue"}; toggles <details><summary>**...**</summary> com itens indentados por TAB; tabelas <table header-row="true"> com <tr>/<td> em linhas; não repetir o título no corpo.
 
+Separadores (SEMPRE): usar divisor "---" entre CADA refeição, entre CADA dia de treino (A/B/C/D/E) e entre CADA tópico/seção principal. Ajuda muito a leitura, é padrão fixo.
+
 ---
 
 ## MECÂNICA
