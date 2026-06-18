@@ -1,0 +1,16 @@
+{
+  "name": "wpp-psychoteam",
+  "version": "1.0.0",
+  "description": "Assistente de WhatsApp: relatório diário priorizado do que responder, com auto-resposta opcional da consultoria.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "relatorio": "node index.js --agora"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.26.0"
+  }
+}
